@@ -41,7 +41,7 @@ supOS 是一个开源的工业物联网 (IIoT) 平台，集成了多个开源项
    git clone <this repo>
    ```
 2. **修改 `.env` 环境变量文件**：
-   - 进入 `supos-ce-deploy` 目录，并编辑 `.env` 文件。
+   - 编辑 `.env` 文件。
    - 修改 `VOLUMES_PATH`（项目数据存储路径）。
    - 修改 `ENTRANCE_DOMAIN`（前端入口域名/IP 地址）。
    - 根据需要修改其他变量。
