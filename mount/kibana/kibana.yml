@@ -1,0 +1,15 @@
+#
+# ** THIS IS AN AUTO-GENERATED FILE **
+#
+
+# Default Kibana configuration for docker target
+server.host: "0.0.0.0"
+elasticsearch.hosts: [ "http://elasticsearch:9200" ]
+# 禁用严格的 CSP 限制，允许内联脚本
+csp.strict: false
+# 设置 Kibana 的 basePath
+server.basePath: "/elastic/home"
+# 允许 Kibana 重写 URL 以支持 basePath
+server.rewriteBasePath: true
+# 禁用对旧浏览器的 CSP 警告
+csp.warnLegacyBrowsers: false

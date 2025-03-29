@@ -1,0 +1,74 @@
+# Filebeat Input Configuration
+filebeat.inputs:
+  - type: container
+    paths:
+      - /var/lib/docker/containers/*/*.log  # 确保这里的路径包含 .log 文件
+    json:
+      keys_under_root: true  # 将 JSON 字段直接放置在根字段下
+      overwrite_keys: true   # 如果字段已存在，允许覆盖
+      add_error_key: true    # 如果解析失败，添加 error 字段
+  - type: log
+    paths:
+      - /log/kong/*.log  #All kong logs
+    fields:
+      container.name: kong  # 添加 container.name 字段
+    fields_under_root: true  # 将自定义字段放置在根字段
+  - type: log
+    enabled: true
+    paths:
+      - /logs/backend/topology.log
+    fields:
+      log_topic: backend-topology
+      container.name: backend-topology  # 添加 container.name 字段
+    fields_under_root: true  # 将自定义字段放置在根字段
+    json:
+      keys_under_root: true
+      overwrite_keys: true
+      add_error_key: true
+  - type: log
+    enabled: true
+    paths:
+      - /logs/node-red/topology.log
+    fields:
+      log_topic: nodered-topology
+      container.name: nodered-topology  # 添加 container.name 字段
+    fields_under_root: true  # 将自定义字段放置在根字段
+    json:
+      keys_under_root: true
+      overwrite_keys: true
+      add_error_key: true
+
+processors:
+  - add_docker_metadata:
+      host: "unix:///var/run/docker.sock"  # 添加 Docker 容器的元数据信息
+  - add_fields:
+      target: "docker_info"
+      fields:
+        container_name: "${docker.container.name}"
+        container_id: "${docker.container.id}"
+
+# Output Configuration
+output.elasticsearch:
+  hosts: ["http://elasticsearch:9200"]  # 确保这里指向你运行的 Elasticsearch OSS 实例
+
+# Optional: Enable logging for Filebeat
+logging:
+  level: info  # 日志级别，可以是 debug、info、warn、error
+  to_files: true  # 日志输出到文件
+  files:
+    path: /var/log/filebeat  # 日志文件目录
+    name: filebeat  # 日志文件名前缀
+    keepfiles: 7  # 保留的日志文件数量
+    permissions: 0644  # 日志文件权限
+
+# Optional: Setup template
+setup.template:
+  name: "filebeat"  # 索引模板名称
+  pattern: "filebeat-*"  # 模板匹配的索引模式
+
+# Optional: Disable ILM (Index Lifecycle Management) since OSS version doesn't have it
+setup.ilm.enabled: false  # 社区版没有 ILM 功能，确保设置为 false
+
+# Optional: Processors to enhance logs
+processors:
+  - add_docker_metadata: {}  # 添加 Docker 元数据

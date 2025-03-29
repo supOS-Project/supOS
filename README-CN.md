@@ -1,6 +1,6 @@
 # supOS: 开源工业物联网 (IIoT) 平台
 
-[English](README.md) | [中文](README_zh.md)
+[English](README.md) | [中文](README-CN.md)
 
 ---
 

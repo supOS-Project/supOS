@@ -1,0 +1,422 @@
+version: '3.8'
+
+networks:
+  default_network:
+    driver: bridge
+
+services:
+  frontend:
+    image: eco-registry.supos.com/bluetron/supos-frontend-platform:1.0.5-T8
+    container_name: frontend
+    ports:
+      - "3010:3000"
+      - "4000:4000"
+      - "3001:3001"
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - OPENAI_API_MODEL=${OPENAI_API_MODEL}
+      - REACT_APP_OS_LANG=${LANGUAGE}
+    networks:
+      - default_network
+  backend:
+    image:  eco-registry.supos.com/bluetron/backend:1.0.5-T8
+    container_name: backend
+    environment:
+      - MEM_OPTS=-Xms512m -Xmx1536m
+      - JAVA_OPTS=-server -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/logs -Delk.enabled=false -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8000
+      - ENV_DB_HOST=postgresql
+      - ENV_DB_PORT=5432
+      - NODE_RED_HOST=nodered
+      - NODE_RED_PORT=1880
+      - SYS_OS_MULTIPLE_TOPIC=${MULTIPLE_TOPIC}
+      - SYS_OS_VERSION=${OS_VERSION}
+      - SYS_OS_LANG=${LANGUAGE}
+      - SYS_OS_AUTH_ENABLE=${OS_AUTH_ENABLE}
+      - SYS_OS_LLM_TYPE=${OS_LLM_TYPE}
+      - SYS_OS_APP_TITLE=${OS_NAME}
+      - SYS_OS_MQTT_TCP_PORT=${OS_MQTT_TCP_PORT}
+      - SYS_OS_MQTT_WEBSOCKET_TSL_PORT=${OS_MQTT_WEBSOCKET_TSL_PORT}
+      - SYS_OS_LOGIN_PATH=${OS_LOGIN_PATH}
+      - SYS_OS_PLATFORM_TYPE=${OS_PLATFORM_TYPE}
+      - SYS_OS_ENTRANCE_URL=${ENTRANCE_PROTOCOL}://${ENTRANCE_DOMAIN}:${ENTRANCE_PORT}
+      - OAUTH_REDIRECT_URI=${ENTRANCE_PROTOCOL}://${ENTRANCE_DOMAIN}:${ENTRANCE_PORT}/inter-api/supos/auth/token
+      - OAUTH_SUPOS_HOME=${ENTRANCE_PROTOCOL}://${ENTRANCE_DOMAIN}:${ENTRANCE_PORT}/home
+      - OAUTH_REALM=${OAUTH_REALM}
+      - OAUTH_CLIENT_NAME=${OAUTH_CLIENT_NAME}
+      - OAUTH_CLIENT_ID=${OAUTH_CLIENT_ID}
+      - OAUTH_CLIENT_SECRET=${OAUTH_CLIENT_SECRET}
+      - OAUTH_GRANT_TYPE=${OAUTH_GRANT_TYPE}
+      - OAUTH_ISSUER_URI=${OAUTH_ISSUER_URI}
+      - OAUTH_REFRESH_TOKEN_TIME=${OAUTH_REFRESH_TOKEN_TIME}
+      - ELASTICSEARCH_VERSION=${ELASTICSEARCH_VERSION}
+      - ELASTICSEARCH_TIMEHORIZON=${ELASTICSEARCH_TIMEHORIZON}
+    ports:
+      - "8080:8080"
+      - "7000:8000"
+    deploy:
+      resources:
+        limits:
+          memory: 3g
+        reservations:
+          memory: 1g
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${VOLUMES_PATH}/backend/apps:/data/apps
+      - ${VOLUMES_PATH}/backend/uns:/data/uns
+      - ${VOLUMES_PATH}/backend/system:/data/system
+      - ${VOLUMES_PATH}/backend/log:/logs
+    depends_on:
+      - postgresql
+      - emqx
+      - nodered
+      - keycloak
+      - chat2db
+    networks:
+      - default_network
+  emqx:
+    image: emqx/emqx:5.8
+    container_name: emqx
+    ports:
+      - "1883:1883"   # MQTT端口
+      - "8883:8883"   # MQTT加密端口
+      - "8083:8083"   # WebSocket端口
+      - "8084:8084"   # WebSocket加密端口
+      - "18083:18083" # EMQX Dashboard端口
+    environment:
+      - EMQX_NAME=emqx
+      - EMQX_NODE__COOKIE=secretcookie # 节点通信时的cookie
+      - service_logo=emqx-original.svg
+      - service_description=aboutus.emqxDescription
+      - service_redirect_url=/emqx/home/
+      - service_account=admin
+      - service_password=public
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${VOLUMES_PATH}/emqx/data:/opt/emqx/data
+      - ${VOLUMES_PATH}/emqx/log:/opt/emqx/log
+      - ${VOLUMES_PATH}/emqx/config/emqx.conf:/opt/emqx/etc/emqx.conf
+      - ${VOLUMES_PATH}/emqx/config/default_api_key.conf:/opt/emqx/etc/default_api_key.conf
+      - ${VOLUMES_PATH}/emqx/config/acl.conf:/opt/emqx/etc/acl.conf
+    restart: always
+    networks:
+      - default_network
+  nodered:
+    image: nodered/node-red:4.0.8-22
+    container_name: nodered
+    user: root
+    ports:
+      - "1880:1880"  # Node-RED web UI端口
+    environment:
+      - service_logo=nodered-original.svg
+      - service_description=aboutus.nodeRedDescription
+      - FLOWS=/data/flows.json
+      - TZ=UTC
+      - OS_LANG=${LANGUAGE}
+      - NODE_OPTIONS=--openssl-legacy-provider
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${VOLUMES_PATH}/node-red:/data  # 使用当前目录的 data 目录
+    depends_on:
+      - emqx
+    restart: always
+    networks:
+      - default_network
+  eventflow:
+    image: nodered/node-red:4.0.8-22
+    container_name: eventflow
+    user: root
+    ports:
+      - "1889:1889"  # Node-RED web UI端口
+    environment:
+      - service_logo=nodered-original.svg
+      - service_description=aboutus.nodeRedDescription
+      - FLOWS=/data/flows.json
+      - TZ=UTC
+      - OS_LANG=${LANGUAGE}
+      - NODE_OPTIONS=--openssl-legacy-provider
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${VOLUMES_PATH}/eventflow:/data  # 使用当前目录的 data 目录
+    restart: always
+    networks:
+      - default_network
+  mcpclient:
+    container_name: mcpclient
+    image: wenhao96/supos-mcpclient:latest
+    ports:
+      - "32893:3000"
+      - "32894:8123"
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - LANGSMITH_API_KEY=${LANGSMITH_API_KEY}
+      - AGENT_DEPLOYMENT_URL=${AGENT_DEPLOYMENT_URL}
+      - SUPOS_API_KEY=${SUPOS_API_KEY}
+      - SUPOS_API_URL=${SUPOS_API_URL}
+    networks:
+      - default_network
+  grafana:
+    image: grafana/grafana:11.4.0
+    profiles:
+      - grafana
+    container_name: grafana
+    user: root
+    ports:
+      - "3000:3000"  # Grafana web UI端口
+    volumes:
+      - ${VOLUMES_PATH}/grafana/data:/var/lib/grafana
+      # - ${VOLUMES_PATH}/grafana/data/plugins:/var/lib/grafana/plugins  # 使用当前目录的 data 目录
+    environment:
+      service_logo: grafana-original.svg
+      service_description: aboutus.grafanaDescription
+      service_redirect_url: /grafana/home/dashboards/
+      # 设置管理员用户的初始密码
+      GF_SECURITY_ADMIN_PASSWORD: "Supos@1304"
+      # 开启 Grafana 的 Explore 功能
+      GF_EXPLORE_ENABLED: "true"
+      # 安装 Grafana 插件
+      GF_INSTALL_PLUGINS: "tdengine-datasource"
+      # 注释掉的设置，用于改变 Grafana 用户界面的语言
+      GF_VIEWER_LANGUAGE: "${GRAFANA_LANG:-en-US}"
+      GF_AUTH_ANONYMOUS_ENABLED: "true"
+      GF_AUTH_ANONYMOUS_ORG_ROLE: "Admin"
+      GF_SECURITY_ALLOW_EMBEDDING: "true"
+      GF_SERVER_ROOT_URL: "http://${ENTRANCE_DOMAIN}/grafana/home/"
+      GF_USERS_DEFAULT_THEME: "light"
+      GF_DATABASE_TYPE: postgres
+      GF_DATABASE_HOST: postgresql:5432
+      GF_DATABASE_NAME: grafana
+      GF_DATABASE_USER: postgres
+      GF_DATABASE_PASSWORD: postgres
+    depends_on:
+      postgresql:
+        condition: service_healthy  # 依赖 PostgreSQL 的健康状态
+    networks:
+      - default_network
+  postgresql:
+    image: timescale/timescaledb:2.18.2-pg17
+    container_name: postgresql
+    environment:
+      service_logo: postgresql-original.svg
+      service_description: aboutus.postgresqlDescription
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${VOLUMES_PATH}/postgresql/pgdata:/var/lib/postgresql/data # 持久化数据
+      - ${VOLUMES_PATH}/postgresql/init-scripts:/docker-entrypoint-initdb.d  # 加载初始化脚本
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+      start_interval: 60s
+    networks:
+      - default_network
+  hasura:
+    image: hasura/graphql-engine:v2.36.8-ce  # 指定 Hasura 的镜像版本
+    container_name: hasura
+    ports:
+      - "8090:8080"  # 将主机的 8090 端口映射到容器的 8080 端口
+    environment:
+      - service_logo=hasura-original.svg
+      - service_description=aboutus.hasuraDescription
+      - service_redirect_url=/hasura/home/
+      - HASURA_GRAPHQL_DATABASE_URL=postgres://postgres:postgres@postgresql:5432/postgres
+      - HASURA_GRAPHQL_ENABLE_CONSOLE=true
+      - HASURA_GRAPHQL_SERVER_ROOT_PATH=/hasura/home
+      - HASURA_GRAPHQL_METADATA_RETRY_INTERVAL=5000 # Wait for 5 seconds before retrying connection
+      - HASURA_GRAPHQL_DATABASE_CONNECTION_TIMEOUT=120 # Set connection timeout to 120 seconds
+    depends_on:
+      postgresql:
+        condition: service_healthy  # 依赖 PostgreSQL 的健康状态
+    restart: always
+    networks:
+      - default_network
+  keycloak:
+    image: keycloak/keycloak:26.0  # 使用 Keycloak 的最新镜像
+    container_name: keycloak
+    ports:
+      - "8081:8080"
+    deploy:
+      resources:
+        limits:
+          memory: 768M
+        reservations:
+          memory: 512M
+    environment:
+      service_logo: keycloak-original.svg
+      service_description: aboutus.keycloakDescription
+      service_redirect_url: /keycloak/home/
+      service_account: admin
+      service_password: admin
+      KC_SSL_REQUIRED: none  # 不要求 SSL
+      KC_PROXY: passthrough                       # 设置代理模式
+      KC_HOSTNAME: "${ENTRANCE_DOMAIN}"              # 指定主机名
+      KC_FRONTEND_URL: "https://${ENTRANCE_DOMAIN}:${ENTRANCE_PORT}"  # 设置前端 URL
+      KC_BOOTSTRAP_ADMIN_USERNAME: admin
+      KC_BOOTSTRAP_ADMIN_PASSWORD: admin
+      KC_COOKIE_SECURE: false                          # 禁用安全 cookie
+      KC_DB: postgres
+      KC_DB_URL: "jdbc:postgresql://postgresql:5432/keycloak"
+      KC_DB_USERNAME: postgres
+      KC_DB_PASSWORD: postgres
+      KC_HEALTH_ENABLED: true
+    volumes:
+      - ${VOLUMES_PATH}/keycloak/data:/opt/keycloak/data  # 将 Keycloak 的数据目录挂载到本地
+      - ${VOLUMES_PATH}/keycloak/theme/keycloak.v2:/opt/keycloak/themes/wenhao
+    depends_on:
+      postgresql:
+        condition: service_healthy  # 依赖 PostgreSQL 的健康状态
+    command: start-dev --hostname ${ENTRANCE_PROTOCOL}://${ENTRANCE_DOMAIN}:${ENTRANCE_PORT}/keycloak/home/auth  --proxy-headers forwarded
+    healthcheck:
+      test: >
+        /bin/bash -c "
+        exec 3<>/dev/tcp/localhost/8080"
+      interval: 10s
+      timeout: 5s
+      retries: 60
+    restart: always
+    networks:
+      - default_network
+  tdengine:
+    image: tdengine/tdengine:3.3.5.0
+    profiles:
+      - tdengine
+    container_name: tdengine
+    ports:
+      - "6030:6030"   # TDengine 服务端口
+      - "6041:6041"   # TDengine 数据库管理端口
+      - "6042:6042"   # TDengine 代理服务端口
+      - "6043:6043"   # TDengine SQL 端口
+      - "6060:6060"   # TDengine 后端页面
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${VOLUMES_PATH}/tdengine/data:/var/lib/taos # 持久化数据
+      - ${VOLUMES_PATH}/tdengine/log:/var/log/taos   # 持久化日志
+    environment:
+      - service_logo=tdengine-original.svg
+      - service_description=aboutus.tdengineDescription
+      - TDENGINE_ROOT_PASSWORD=taosdata # 设置 root 用户密码
+      - TD_ENGINE_ROOT_USER=root
+    networks:
+      - default_network
+  kong:
+    image: kong:3.9.0
+    container_name: kong
+    environment:
+      service_logo: konga-original.svg
+      service_description: aboutus.kongaDescription
+      service_redirect_url: /konga/home/
+      KONG_DATABASE: postgres
+      KONG_PG_HOST: postgresql
+      KONG_PG_PASSWORD: postgres
+      KONG_PG_USER: postgres
+      KONG_ADMIN_LISTEN: 0.0.0.0:8001
+      KONG_SSL_CERT: /etc/kong/ssl/fullchain.cer
+      KONG_SSL_CERT_KEY: /etc/kong/ssl/private.key
+      KONG_PROXY_LISTEN: 0.0.0.0:8000, 0.0.0.0:8443 ssl
+      KONG_PLUGINS: bundled,supos-auth-checker,supos-url-transformer
+      KONG_LOG_LEVEL: error
+    volumes:
+      - ${VOLUMES_PATH}/kong/certificationfile:/etc/kong/ssl:ro
+      - ${VOLUMES_PATH}/kong/kong_config.yml:/etc/kong/kong_config.yml
+      - ${VOLUMES_PATH}/kong/start.sh:/usr/local/bin/start.sh
+      - ${VOLUMES_PATH}/kong/kong-plugin-auth-checker:/usr/local/share/lua/5.1/kong/plugins/supos-auth-checker
+      - ${VOLUMES_PATH}/kong/kong-plugin-url-transformer:/usr/local/share/lua/5.1/kong/plugins/supos-url-transformer
+    ports:
+      - "8088:8000"
+      - "8443:8443"
+      - "8001:8001"
+      - "8444:8444"
+    depends_on:
+      - emqx
+      - backend
+      - frontend
+      - keycloak
+      - postgresql
+    command: ["sh", "/usr/local/bin/start.sh"]
+    restart: always  # 确保 Kong 自动重启
+    networks:
+      - default_network
+  konga:
+    image: pantsel/konga:0.14.9
+    container_name: konga
+    environment:
+      # DB_ADAPTER: mysql           # 使用 MySQL 作为数据库
+      # DB_HOST: konga_mysql_database # MySQL 容器的主机名
+      # DB_USER: konga               # MySQL 用户
+      # DB_PASSWORD: konga           # MySQL 用户密码
+      # DB_DATABASE: konga          # MySQL 数据库名
+      # NODE_ENV: production           # 设置 NODE_ENV 为生产环境
+      NO_AUTH: "true"             # 禁用认证
+      KONGA_SEED_KONG_NODE_DATA_SOURCE_FILE: /node.data
+    ports:
+      - "1337:1337"  # 映射 Konga 的端口到主机
+    volumes:
+      - ${VOLUMES_PATH}/konga/db/:/app/kongadata/
+      - ${VOLUMES_PATH}/konga/node.data:/node.data  # 持久化数据库数据
+    restart: always
+    networks:
+      - default_network
+  minio:
+    image: minio/minio:RELEASE.2024-12-18T13-15-44Z
+    container_name: minio
+    profiles:
+      - minio
+    environment:
+      - service_logo=minio-original.svg
+      - service_description=aboutus.minioDescription
+      - service_redirect_url=/minio/home/
+      - MINIO_ACCESS_KEY=admin
+      - MINIO_SECRET_KEY=adminpassword
+      - MINIO_BROWSER_REDIRECT_URL=${ENTRANCE_PROTOCOL}://${ENTRANCE_DOMAIN}:${ENTRANCE_PORT}/minio/home
+      - MINIO_IDENTITY_OPENID_CONFIG_URL=${OAUTH_ISSUER_URI}/realms/supos/.well-known/openid-configuration
+      - MINIO_IDENTITY_OPENID_CLIENT_ID=${OAUTH_CLIENT_ID}
+      - MINIO_IDENTITY_OPENID_CLIENT_SECRET=${OAUTH_CLIENT_SECRET}
+      - MINIO_IDENTITY_OPENID_SCOPES=openid
+      - MINIO_IDENTITY_OPENID_ROLE_POLICY=public-delete-policy
+      - MINIO_IDENTITY_OPENID_REDIRECT_URI=${ENTRANCE_PROTOCOL}://${ENTRANCE_DOMAIN}:${ENTRANCE_PORT}/minio/home/oauth_callback
+    ports:
+      - "9000:9000"  # Web UI 端口
+      - "9001:9001"  # Admin API 端口 (如果需要访问管理接口)
+    volumes:
+      - ${VOLUMES_PATH}/minio/data:/data  # 数据存储位置
+    command: server /data --console-address ":9001"
+    depends_on:
+      keycloak:
+        condition: service_healthy
+    networks:
+      - default_network
+  fuxa:
+    container_name: fuxa
+    image: eco-registry.supos.com/bluetron/fuxa:1.0.5-T12
+    profiles:
+      - fuxa
+    environment:
+      - LANG=${FUXA_LANG:-en}
+      - service_logo=fuxa.svg
+    restart: unless-stopped
+    volumes:
+      - ${VOLUMES_PATH}/fuxa/appdata:/usr/src/app/FUXA/server/_appdata
+      - ${VOLUMES_PATH}/fuxa/db:/usr/src/app/FUXA/server/_db
+      - ${VOLUMES_PATH}/fuxa/logs:/usr/src/app/FUXA/server/_logs
+      - ${VOLUMES_PATH}/fuxa/images:/usr/src/app/FUXA/server/_images
+    ports:
+      - '1881:1881'
+    networks:
+      - default_network
+  chat2db:
+    container_name: chat2db
+    image: chat2db/chat2db:latest
+    volumes:
+      - ${VOLUMES_PATH}/chat2db/data:/root/.chat2db/
+    ports:
+      - '10824:10824'
+    command: java -Dloader.path=lib -Dspring.profiles.active=release -Dchatgpt.apiKey=${OPENAI_API_KEY} -jar chat2db-server-web-start.jar
+    environment:
+      - service_logo=chat2db.svg
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+    networks:
+      - default_network
