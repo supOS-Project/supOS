@@ -1,6 +1,6 @@
 # supOS: An Open-Source IIoT Platform
 
-[English](README.md) | [中文](README_zh.md)
+[English](README.md) | [中文](README-CN.md)
 
 ---
 
