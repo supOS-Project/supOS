@@ -41,7 +41,7 @@ supOS is an open-source Industrial Internet of Things (IIoT) platform that integ
    git clone <this repo>
    ```
 2. **Modify the environment variables in the `.env` file**:
-   - Navigate to the `supos-ce-deploy` directory and edit the `.env` file.
+   - edit the `.env` file.
    - Update `VOLUMES_PATH` (directory for storing project data).
    - Update `ENTRANCE_DOMAIN` (frontend entry domain/IP address).
    - Modify other variables as needed.
