@@ -6,7 +6,7 @@ networks:
 
 services:
   frontend:
-    image: eco-registry.supos.com/bluetron/supos-frontend-platform:1.0.5-T8
+    image: eco-registry.supos.com/sup9bnlh/supos-frontend-platform:1.0.5-T9
     container_name: frontend
     ports:
       - "3010:3000"
@@ -19,10 +19,10 @@ services:
     networks:
       - default_network
   backend:
-    image:  eco-registry.supos.com/bluetron/backend:1.0.5-T8
+    image:  eco-registry.supos.com/sup9bnlh/backend:1.0.5-T9
     container_name: backend
     environment:
-      - MEM_OPTS=-Xms512m -Xmx3g
+      - MEM_OPTS=-Xms512m -Xmx3g -Dsink.thread=8
       - JAVA_OPTS=-server -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/logs -Delk.enabled=true -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8000
       - ENV_DB_HOST=postgresql
       - ENV_DB_PORT=5432
@@ -175,7 +175,7 @@ services:
       # 开启 Grafana 的 Explore 功能
       GF_EXPLORE_ENABLED: "true"
       # 安装 Grafana 插件
-      GF_INSTALL_PLUGINS: "tdengine-datasource"
+      # GF_INSTALL_PLUGINS: "grafana-clock-panel,grafana-mqtt-datasource,tdengine-datasource,yesoreyeram-infinity-datasource"
       # 注释掉的设置，用于改变 Grafana 用户界面的语言
       GF_VIEWER_LANGUAGE: "${GRAFANA_LANG:-en-US}"
       GF_AUTH_ANONYMOUS_ENABLED: "true"
@@ -478,7 +478,7 @@ services:
     container_name: fuxa
     profiles:
       - fuxa
-    image: eco-registry.supos.com/bluetron/fuxa:1.0.5-T12
+    image: eco-registry.supos.com/sup9bnlh/fuxa:1.0.5-T13
     environment:
       - LANG=${FUXA_LANG:-en}
       - service_logo=fuxa.svg
