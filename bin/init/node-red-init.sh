@@ -6,15 +6,19 @@ set -e
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")"; pwd)"
 source $SCRIPT_DIR/../global/log.sh
 
+times=5
+
 echo ">> start to init $2 modules ..."
-while true; do
+while (( times > 0 )); do
     # 检查端口是否开启
     if lsof -i :$1 > /dev/null 2>&1; then
         break  # 端口开启后退出循环
     else
+        (( times-- ))
         sleep 5  # 等待5秒后重试
     fi
 done
+
 # --verbose
 docker exec $2 sh -c "cd /data && npm install $3 --no-audit --offline node-red-contrib-modbus@5.43.0" \
 || error "node-red install modbus failed!"
@@ -44,10 +48,10 @@ docker exec $2 sh -c "cd /data && npm install $3 --no-audit --offline node-red-c
 docker exec $2 sh -c "cd /data && npm install $3 --no-audit --offline node-red-contrib-postgresql@0.14.2" \
 || error "node-red install postgresq failed!"
 
-docker exec $2 npm install $3 --offline --prefix /data /data/offline_modules/node-red-node-supmodel \
+docker exec $2 sh -c "cd /data && npm install $3 --offline --prefix /data /data/offline_modules/node-red-node-supmodel" \
 || error "node-red install supmodel failed!"
 
-docker exec $2 npm install $3 --offline --prefix /data /data/offline_modules/node-red-node-model-converter \
+docker exec $2 sh -c "cd /data && npm install $3 --offline --prefix /data /data/offline_modules/node-red-node-model-converter" \
 || error "node-red install model-converter failed!"
 
 # overide js file
