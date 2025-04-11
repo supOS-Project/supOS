@@ -598,7 +598,7 @@ routes:
   path_handling: v1
   regex_priority: 0
   tags:
-  - ${ENABLE_ELK}
+  - ${ENABLE_ELK_MENU}
   - description:menu.desc.logs
   - sort:7
   - parentName:menu.tag.system

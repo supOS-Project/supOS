@@ -13,15 +13,13 @@ if [ $ENTRANCE_PORT == '80' ] || [ $ENTRANCE_PORT == '443' ]; then
 fi
 export BASE_URL=$REDIRECT_BASE_URL
 if [ "$OS_RESOURCE_SPEC" == "1" ]; then
-  export ENABLE_ELK=none
   export ENABLE_PORTAINER=none
   export ENABLE_MCP=none
 else
-  export ENABLE_ELK=menu
   export ENABLE_PORTAINER=menu
   export ENABLE_MCP=menu
 fi
-
+export $(grep -v '^#' $SCRIPT_DIR/../../.env.tmp | xargs)
 # 输入文件（模板文件）和输出文件
 TEMPLATE_FILE=$SCRIPT_DIR/../../mount/kong/kong_config.yml.tpl
 OUTPUT_FILE=$SCRIPT_DIR/../../mount/kong/kong_config.yml

@@ -23,7 +23,7 @@ services:
     container_name: backend
     environment:
       - MEM_OPTS=-Xms512m -Xmx3g -Dsink.thread=8
-      - JAVA_OPTS=-server -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/logs -Delk.enabled=true -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8000
+      - JAVA_OPTS=-server -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/logs -Delk.enabled=${ENABLE_ELK} -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8000
       - ENV_DB_HOST=postgresql
       - ENV_DB_PORT=5432
       - NODE_RED_HOST=nodered
@@ -285,6 +285,8 @@ services:
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch-oss:7.10.2
     container_name: elasticsearch
+    profiles:
+      - elk
     environment:
       - service_logo=elasticsearch.svg
       - discovery.type=single-node
@@ -313,6 +315,8 @@ services:
   kibana:
     image: docker.elastic.co/kibana/kibana-oss:7.10.2
     container_name: kibana
+    profiles:
+      - elk
     environment:
       - csp.enabled=false  # 禁用 CSP 插件
       - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
@@ -334,6 +338,8 @@ services:
   filebeat:
     image: docker.elastic.co/beats/filebeat-oss:7.10.2
     container_name: filebeat
+    profiles:
+      - elk
     user: root
     environment:
       - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
