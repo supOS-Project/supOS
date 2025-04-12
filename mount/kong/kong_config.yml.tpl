@@ -1954,7 +1954,7 @@ routes:
   preserve_host: false
   response_buffering: true
 plugins:
-- enabled: false
+- enabled: true
   instance_name: ~
   route: ~
   created_at: 1733799127

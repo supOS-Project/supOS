@@ -25,14 +25,14 @@ chooseProfile1() {
             activeServices+=",fuxa"
         fi
 
-        read -p "Step 2: grafana[y/n]: " choicegrafana
+        read -p "Step 2: grafana? [y/n]: " choicegrafana
         choicegrafana=${choicegrafana:-Y}
         if [[ $choicegrafana =~ ^[Yy] ]]; then
             profileCommand+="--profile grafana "
             activeServices+=",grafana"
         fi
 
-        read -p "Step 3: minio[y/n]: " choiceminio
+        read -p "Step 3: minio? [y/n]: " choiceminio
         choiceminio=${choiceminio:-Y}
         if [[ $choiceminio =~ ^[Yy] ]]; then
             profileCommand+="--profile minio "
@@ -78,20 +78,20 @@ chooseProfile2() {
             activeServices+=",fuxa"
         fi
 
-        read -p "Step 2: grafana[y/n]: " choicegrafana
+        read -p "Step 2: grafana? [y/n]: " choicegrafana
         choicegrafana=${choicegrafana:-Y}
         if [[ $choicegrafana =~ ^[Yy] ]]; then
             profileCommand+="--profile grafana "
             activeServices+=",grafana"
         fi
 
-        read -p "Step 3: minio[y/n]: " choiceminio
+        read -p "Step 3: minio? [y/n]: " choiceminio
         choiceminio=${choiceminio:-Y}
         if [[ $choiceminio =~ ^[Yy] ]]; then
             profileCommand+="--profile minio "
             activeServices+=",minio"
         fi
-        read -p "Step 4: elk[y/n]: " choiceelk
+        read -p "Step 4: elasticsearch, kibana, filebeat? [y/n]: " choiceelk
         choiceelk=${choiceelk:-Y}
         if [[ $choiceelk =~ ^[Yy] ]]; then
             profileCommand+="--profile elk "
