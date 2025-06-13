@@ -1,8 +1,5 @@
 #!/bin/bash
 
-error() {
-    echo -e "${RED}ERROR：$1${NC}" >&2
-}
 
 check_versions() {
     # 检查 docker 是否安装以及版本
@@ -37,7 +34,7 @@ check_versions() {
         exit 1
     fi
 
-    echo "Docker and Docker Compose meet the required versions."
+    info "Docker and Docker Compose meet the required versions."
 }
 
 # 安装 Docker
@@ -73,9 +70,18 @@ install_docker_offline() {
     fi
 
     # 安装离线包
-    echo "Installing Docker using offline .deb packages..."
-    SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")"; pwd)"
-    sudo dpkg -i $SCRIPT_DIR/../../debs/docker/*.deb
+    info "Installing Docker using offline .deb packages..."
+    sudo dpkg -i $SCRIPT_DIR/../debs/docker/*.deb
+}
+
+open_docker_api() {
+    DOCKER_SERVICE_FILE="/usr/lib/systemd/system/docker.service"
+    if [ ! -f "$DOCKER_SERVICE_FILE" ]; then
+        DOCKER_SERVICE_FILE="/lib/systemd/system/docker.service"
+    fi
+    sudo sed -i '/^ExecStart=/c\ExecStart=/usr/bin/dockerd -H fd:// -H tcp://0.0.0.0:2375 -H unix://var/run/docker.sock --containerd=/run/containerd/containerd.sock' "$DOCKER_SERVICE_FILE"
+    sudo systemctl daemon-reload && sudo systemctl restart docker
+
 }
 
 main() {
@@ -89,7 +95,7 @@ main() {
         else
           install_docker_offline
         fi
-
+        open_docker_api
     fi
 }
 

@@ -512,7 +512,6 @@ INSERT INTO "public"."client_scope" VALUES ('f7db029c-7313-47c1-a6e8-56050682927
 INSERT INTO "public"."client_scope" VALUES ('19b9d4dd-3607-4e3a-838e-b156630fe78e', 'profile', '8920b375-d705-4d30-8a71-52d9c14ec4ba', 'OpenID Connect built-in scope: profile', 'openid-connect');
 INSERT INTO "public"."client_scope" VALUES ('aab92fd1-d7b8-456c-aa9f-19c6c782260c', 'email', '8920b375-d705-4d30-8a71-52d9c14ec4ba', 'OpenID Connect built-in scope: email', 'openid-connect');
 INSERT INTO "public"."client_scope" VALUES ('cca2f7fe-1d61-468e-a9df-83d25f108dc2', 'address', '8920b375-d705-4d30-8a71-52d9c14ec4ba', 'OpenID Connect built-in scope: address', 'openid-connect');
-INSERT INTO "public"."client_scope" VALUES ('56c1640c-33d7-4e5f-a255-e920feab1200', 'phone', '8920b375-d705-4d30-8a71-52d9c14ec4ba', 'OpenID Connect built-in scope: phone', 'openid-connect');
 INSERT INTO "public"."client_scope" VALUES ('ad9286f6-2377-4db7-872b-5edcbef2017a', 'roles', '8920b375-d705-4d30-8a71-52d9c14ec4ba', 'OpenID Connect scope for add user roles to the access token', 'openid-connect');
 INSERT INTO "public"."client_scope" VALUES ('147d0a04-66fc-49db-a1c4-fa233eb47825', 'web-origins', '8920b375-d705-4d30-8a71-52d9c14ec4ba', 'OpenID Connect scope for add allowed web origins to the access token', 'openid-connect');
 INSERT INTO "public"."client_scope" VALUES ('fcc54556-ec96-4011-a89e-7c1d0ea2e714', 'microprofile-jwt', '8920b375-d705-4d30-8a71-52d9c14ec4ba', 'Microprofile - JWT built-in scope', 'openid-connect');
@@ -521,6 +520,8 @@ INSERT INTO "public"."client_scope" VALUES ('9475e044-78d6-41ac-88a8-0cc0cedf587
 INSERT INTO "public"."client_scope" VALUES ('e5d6dd73-37ab-4864-abd8-b473bc110772', 'organization', '8920b375-d705-4d30-8a71-52d9c14ec4ba', 'Additional claims about the organization a subject belongs to', 'openid-connect');
 INSERT INTO "public"."client_scope" VALUES ('2c26c6cb-b18b-4fd9-bbde-38d81cfaa038', 'firstTimeLogin', '8920b375-d705-4d30-8a71-52d9c14ec4ba', 'firstTimeLogin', 'openid-connect');
 INSERT INTO "public"."client_scope" VALUES ('4e44f85d-bb73-4eb9-af2a-c1a641792a94', 'tipsEnable', '8920b375-d705-4d30-8a71-52d9c14ec4ba', 'tipsEnable', 'openid-connect');
+INSERT INTO "public"."client_scope" VALUES ('51ec41ba-ea8b-4359-80a3-e3de154ee389', 'homePage', '8920b375-d705-4d30-8a71-52d9c14ec4ba', 'homePage', 'openid-connect');
+INSERT INTO "public"."client_scope" VALUES ('7ee32b54-6b11-4f84-ae7a-bec36a6fd1ec', 'phone', '8920b375-d705-4d30-8a71-52d9c14ec4ba', 'phone', 'openid-connect');
 
 -- ----------------------------
 -- Table structure for client_scope_attributes
@@ -582,9 +583,6 @@ INSERT INTO "public"."client_scope_attributes" VALUES ('aab92fd1-d7b8-456c-aa9f-
 INSERT INTO "public"."client_scope_attributes" VALUES ('cca2f7fe-1d61-468e-a9df-83d25f108dc2', 'true', 'display.on.consent.screen');
 INSERT INTO "public"."client_scope_attributes" VALUES ('cca2f7fe-1d61-468e-a9df-83d25f108dc2', '${addressScopeConsentText}', 'consent.screen.text');
 INSERT INTO "public"."client_scope_attributes" VALUES ('cca2f7fe-1d61-468e-a9df-83d25f108dc2', 'true', 'include.in.token.scope');
-INSERT INTO "public"."client_scope_attributes" VALUES ('56c1640c-33d7-4e5f-a255-e920feab1200', 'true', 'display.on.consent.screen');
-INSERT INTO "public"."client_scope_attributes" VALUES ('56c1640c-33d7-4e5f-a255-e920feab1200', '${phoneScopeConsentText}', 'consent.screen.text');
-INSERT INTO "public"."client_scope_attributes" VALUES ('56c1640c-33d7-4e5f-a255-e920feab1200', 'true', 'include.in.token.scope');
 INSERT INTO "public"."client_scope_attributes" VALUES ('ad9286f6-2377-4db7-872b-5edcbef2017a', 'true', 'display.on.consent.screen');
 INSERT INTO "public"."client_scope_attributes" VALUES ('ad9286f6-2377-4db7-872b-5edcbef2017a', '${rolesScopeConsentText}', 'consent.screen.text');
 INSERT INTO "public"."client_scope_attributes" VALUES ('ad9286f6-2377-4db7-872b-5edcbef2017a', 'false', 'include.in.token.scope');
@@ -608,7 +606,14 @@ INSERT INTO "public"."client_scope_attributes" VALUES ('4e44f85d-bb73-4eb9-af2a-
 INSERT INTO "public"."client_scope_attributes" VALUES ('4e44f85d-bb73-4eb9-af2a-c1a641792a94', '', 'consent.screen.text');
 INSERT INTO "public"."client_scope_attributes" VALUES ('4e44f85d-bb73-4eb9-af2a-c1a641792a94', 'true', 'include.in.token.scope');
 INSERT INTO "public"."client_scope_attributes" VALUES ('4e44f85d-bb73-4eb9-af2a-c1a641792a94', '', 'gui.order');
-
+INSERT INTO "public"."client_scope_attributes" VALUES ('51ec41ba-ea8b-4359-80a3-e3de154ee389', 'true', 'display.on.consent.screen');
+INSERT INTO "public"."client_scope_attributes" VALUES ('51ec41ba-ea8b-4359-80a3-e3de154ee389', '', 'consent.screen.text');
+INSERT INTO "public"."client_scope_attributes" VALUES ('51ec41ba-ea8b-4359-80a3-e3de154ee389', 'true', 'include.in.token.scope');
+INSERT INTO "public"."client_scope_attributes" VALUES ('51ec41ba-ea8b-4359-80a3-e3de154ee389', '', 'gui.order');
+INSERT INTO "public"."client_scope_attributes" VALUES ('7ee32b54-6b11-4f84-ae7a-bec36a6fd1ec', 'true', 'display.on.consent.screen');
+INSERT INTO "public"."client_scope_attributes" VALUES ('7ee32b54-6b11-4f84-ae7a-bec36a6fd1ec', '', 'consent.screen.text');
+INSERT INTO "public"."client_scope_attributes" VALUES ('7ee32b54-6b11-4f84-ae7a-bec36a6fd1ec', 'true', 'include.in.token.scope');
+INSERT INTO "public"."client_scope_attributes" VALUES ('7ee32b54-6b11-4f84-ae7a-bec36a6fd1ec', '', 'gui.order');
 
 -- ----------------------------
 -- Table structure for client_scope_client
@@ -700,7 +705,6 @@ INSERT INTO "public"."client_scope_client" VALUES ('dc2e7749-eb5c-4249-ae0a-40ab
 INSERT INTO "public"."client_scope_client" VALUES ('dc2e7749-eb5c-4249-ae0a-40abd10990a7', '27d726f0-a771-44c8-8db7-e7a44329b42f', 'f');
 INSERT INTO "public"."client_scope_client" VALUES ('dc2e7749-eb5c-4249-ae0a-40abd10990a7', 'cca2f7fe-1d61-468e-a9df-83d25f108dc2', 'f');
 INSERT INTO "public"."client_scope_client" VALUES ('dc2e7749-eb5c-4249-ae0a-40abd10990a7', 'fcc54556-ec96-4011-a89e-7c1d0ea2e714', 'f');
-INSERT INTO "public"."client_scope_client" VALUES ('dc2e7749-eb5c-4249-ae0a-40abd10990a7', '56c1640c-33d7-4e5f-a255-e920feab1200', 'f');
 INSERT INTO "public"."client_scope_client" VALUES ('bb5ba74b-f6b7-4eb3-aaf7-34f232f8709d', 'aab92fd1-d7b8-456c-aa9f-19c6c782260c', 't');
 INSERT INTO "public"."client_scope_client" VALUES ('bb5ba74b-f6b7-4eb3-aaf7-34f232f8709d', '9475e044-78d6-41ac-88a8-0cc0cedf5875', 't');
 INSERT INTO "public"."client_scope_client" VALUES ('bb5ba74b-f6b7-4eb3-aaf7-34f232f8709d', 'ad9286f6-2377-4db7-872b-5edcbef2017a', 't');
@@ -711,7 +715,6 @@ INSERT INTO "public"."client_scope_client" VALUES ('bb5ba74b-f6b7-4eb3-aaf7-34f2
 INSERT INTO "public"."client_scope_client" VALUES ('bb5ba74b-f6b7-4eb3-aaf7-34f232f8709d', '27d726f0-a771-44c8-8db7-e7a44329b42f', 'f');
 INSERT INTO "public"."client_scope_client" VALUES ('bb5ba74b-f6b7-4eb3-aaf7-34f232f8709d', 'cca2f7fe-1d61-468e-a9df-83d25f108dc2', 'f');
 INSERT INTO "public"."client_scope_client" VALUES ('bb5ba74b-f6b7-4eb3-aaf7-34f232f8709d', 'fcc54556-ec96-4011-a89e-7c1d0ea2e714', 'f');
-INSERT INTO "public"."client_scope_client" VALUES ('bb5ba74b-f6b7-4eb3-aaf7-34f232f8709d', '56c1640c-33d7-4e5f-a255-e920feab1200', 'f');
 INSERT INTO "public"."client_scope_client" VALUES ('ad3bceb3-d55d-4588-a11a-71a0db1bd252', 'aab92fd1-d7b8-456c-aa9f-19c6c782260c', 't');
 INSERT INTO "public"."client_scope_client" VALUES ('ad3bceb3-d55d-4588-a11a-71a0db1bd252', '9475e044-78d6-41ac-88a8-0cc0cedf5875', 't');
 INSERT INTO "public"."client_scope_client" VALUES ('ad3bceb3-d55d-4588-a11a-71a0db1bd252', 'ad9286f6-2377-4db7-872b-5edcbef2017a', 't');
@@ -722,7 +725,6 @@ INSERT INTO "public"."client_scope_client" VALUES ('ad3bceb3-d55d-4588-a11a-71a0
 INSERT INTO "public"."client_scope_client" VALUES ('ad3bceb3-d55d-4588-a11a-71a0db1bd252', '27d726f0-a771-44c8-8db7-e7a44329b42f', 'f');
 INSERT INTO "public"."client_scope_client" VALUES ('ad3bceb3-d55d-4588-a11a-71a0db1bd252', 'cca2f7fe-1d61-468e-a9df-83d25f108dc2', 'f');
 INSERT INTO "public"."client_scope_client" VALUES ('ad3bceb3-d55d-4588-a11a-71a0db1bd252', 'fcc54556-ec96-4011-a89e-7c1d0ea2e714', 'f');
-INSERT INTO "public"."client_scope_client" VALUES ('ad3bceb3-d55d-4588-a11a-71a0db1bd252', '56c1640c-33d7-4e5f-a255-e920feab1200', 'f');
 INSERT INTO "public"."client_scope_client" VALUES ('5b6e7278-a3a8-407d-94eb-6befd126bf16', 'aab92fd1-d7b8-456c-aa9f-19c6c782260c', 't');
 INSERT INTO "public"."client_scope_client" VALUES ('5b6e7278-a3a8-407d-94eb-6befd126bf16', '9475e044-78d6-41ac-88a8-0cc0cedf5875', 't');
 INSERT INTO "public"."client_scope_client" VALUES ('5b6e7278-a3a8-407d-94eb-6befd126bf16', 'ad9286f6-2377-4db7-872b-5edcbef2017a', 't');
@@ -733,7 +735,6 @@ INSERT INTO "public"."client_scope_client" VALUES ('5b6e7278-a3a8-407d-94eb-6bef
 INSERT INTO "public"."client_scope_client" VALUES ('5b6e7278-a3a8-407d-94eb-6befd126bf16', '27d726f0-a771-44c8-8db7-e7a44329b42f', 'f');
 INSERT INTO "public"."client_scope_client" VALUES ('5b6e7278-a3a8-407d-94eb-6befd126bf16', 'cca2f7fe-1d61-468e-a9df-83d25f108dc2', 'f');
 INSERT INTO "public"."client_scope_client" VALUES ('5b6e7278-a3a8-407d-94eb-6befd126bf16', 'fcc54556-ec96-4011-a89e-7c1d0ea2e714', 'f');
-INSERT INTO "public"."client_scope_client" VALUES ('5b6e7278-a3a8-407d-94eb-6befd126bf16', '56c1640c-33d7-4e5f-a255-e920feab1200', 'f');
 INSERT INTO "public"."client_scope_client" VALUES ('1e143276-845b-4159-ad6b-1817ec62204c', 'aab92fd1-d7b8-456c-aa9f-19c6c782260c', 't');
 INSERT INTO "public"."client_scope_client" VALUES ('1e143276-845b-4159-ad6b-1817ec62204c', '9475e044-78d6-41ac-88a8-0cc0cedf5875', 't');
 INSERT INTO "public"."client_scope_client" VALUES ('1e143276-845b-4159-ad6b-1817ec62204c', 'ad9286f6-2377-4db7-872b-5edcbef2017a', 't');
@@ -755,7 +756,6 @@ INSERT INTO "public"."client_scope_client" VALUES ('200c8e2f-4b1e-46e0-b1f6-92b0
 INSERT INTO "public"."client_scope_client" VALUES ('200c8e2f-4b1e-46e0-b1f6-92b060f2717c', '27d726f0-a771-44c8-8db7-e7a44329b42f', 'f');
 INSERT INTO "public"."client_scope_client" VALUES ('200c8e2f-4b1e-46e0-b1f6-92b060f2717c', 'cca2f7fe-1d61-468e-a9df-83d25f108dc2', 'f');
 INSERT INTO "public"."client_scope_client" VALUES ('200c8e2f-4b1e-46e0-b1f6-92b060f2717c', 'fcc54556-ec96-4011-a89e-7c1d0ea2e714', 'f');
-INSERT INTO "public"."client_scope_client" VALUES ('200c8e2f-4b1e-46e0-b1f6-92b060f2717c', '56c1640c-33d7-4e5f-a255-e920feab1200', 'f');
 INSERT INTO "public"."client_scope_client" VALUES ('a7b53e5e-3567-470a-9da1-94cc0c7f18e6', 'aab92fd1-d7b8-456c-aa9f-19c6c782260c', 't');
 INSERT INTO "public"."client_scope_client" VALUES ('a7b53e5e-3567-470a-9da1-94cc0c7f18e6', '9475e044-78d6-41ac-88a8-0cc0cedf5875', 't');
 INSERT INTO "public"."client_scope_client" VALUES ('a7b53e5e-3567-470a-9da1-94cc0c7f18e6', 'ad9286f6-2377-4db7-872b-5edcbef2017a', 't');
@@ -766,9 +766,10 @@ INSERT INTO "public"."client_scope_client" VALUES ('a7b53e5e-3567-470a-9da1-94cc
 INSERT INTO "public"."client_scope_client" VALUES ('a7b53e5e-3567-470a-9da1-94cc0c7f18e6', '27d726f0-a771-44c8-8db7-e7a44329b42f', 'f');
 INSERT INTO "public"."client_scope_client" VALUES ('a7b53e5e-3567-470a-9da1-94cc0c7f18e6', 'cca2f7fe-1d61-468e-a9df-83d25f108dc2', 'f');
 INSERT INTO "public"."client_scope_client" VALUES ('a7b53e5e-3567-470a-9da1-94cc0c7f18e6', 'fcc54556-ec96-4011-a89e-7c1d0ea2e714', 'f');
-INSERT INTO "public"."client_scope_client" VALUES ('a7b53e5e-3567-470a-9da1-94cc0c7f18e6', '56c1640c-33d7-4e5f-a255-e920feab1200', 'f');
 INSERT INTO "public"."client_scope_client" VALUES ('a7b53e5e-3567-470a-9da1-94cc0c7f18e6', '2c26c6cb-b18b-4fd9-bbde-38d81cfaa038', 't');
 INSERT INTO "public"."client_scope_client" VALUES ('a7b53e5e-3567-470a-9da1-94cc0c7f18e6', '4e44f85d-bb73-4eb9-af2a-c1a641792a94', 't');
+INSERT INTO "public"."client_scope_client" VALUES ('a7b53e5e-3567-470a-9da1-94cc0c7f18e6', '51ec41ba-ea8b-4359-80a3-e3de154ee389', 't');
+INSERT INTO "public"."client_scope_client" VALUES ('a7b53e5e-3567-470a-9da1-94cc0c7f18e6', '7ee32b54-6b11-4f84-ae7a-bec36a6fd1ec', 't');
 
 -- ----------------------------
 -- Table structure for client_scope_role_mapping
@@ -921,7 +922,7 @@ INSERT INTO "public"."component_config" VALUES ('f4ef63ff-70bd-49cd-86d8-7c50301
 INSERT INTO "public"."component_config" VALUES ('6daef81a-3ec5-42c5-a437-67c74ec4ad45', '42125d59-532f-4f8b-bf8e-d87f7c55c080', 'allowed-protocol-mapper-types', 'oidc-sha256-pairwise-sub-mapper');
 INSERT INTO "public"."component_config" VALUES ('9976f7e8-3d88-42ad-9fd8-e0988121f3ef', '42125d59-532f-4f8b-bf8e-d87f7c55c080', 'allowed-protocol-mapper-types', 'oidc-usermodel-attribute-mapper');
 INSERT INTO "public"."component_config" VALUES ('5dcbea4c-6077-4ff0-9d5d-33a14fec3e00', '724be55b-51c3-45be-bf71-a5d7ae45b7ef', 'allow-default-scopes', 'true');
-INSERT INTO "public"."component_config" VALUES ('a0ef1f44-524c-4e5e-a532-bad92a0868b8', 'a2cf44c3-ba30-4e9d-93e2-973943bb60a3', 'kc.user.profile.config', '{"attributes":[{"name":"username","displayName":"${username}","validations":{"length":{"min":3,"max":255},"username-prohibited-characters":{},"up-username-not-idn-homograph":{}},"permissions":{"view":["admin","user"],"edit":["admin","user"]},"multivalued":false},{"name":"email","displayName":"${email}","validations":{"email":{},"length":{"max":255}},"annotations":{},"permissions":{"view":["admin","user"],"edit":["admin","user"]},"multivalued":false},{"name":"firstTimeLogin","displayName":"firstTimeLogin","validations":{},"annotations":{},"permissions":{"view":[],"edit":["admin"]},"multivalued":false},{"name":"firstName","displayName":"${firstName}","validations":{},"annotations":{},"permissions":{"view":[],"edit":["admin"]},"multivalued":false},{"name":"tipsEnable","displayName":"${profile.attributes.tipsEnable}","validations":{},"annotations":{},"permissions":{"view":["admin"],"edit":["admin"]},"multivalued":false}],"groups":[{"name":"user-metadata","displayHeader":"User metadata","displayDescription":"Attributes, which refer to user metadata"}]}');
+INSERT INTO "public"."component_config" VALUES ('ab7b5e83-5bd6-4437-a4bf-fb17abe99d4a', 'a2cf44c3-ba30-4e9d-93e2-973943bb60a3', 'kc.user.profile.config', '{"attributes":[{"name":"username","displayName":"${username}","validations":{"length":{"min":3,"max":255},"username-prohibited-characters":{},"up-username-not-idn-homograph":{}},"permissions":{"view":["admin","user"],"edit":["admin","user"]},"multivalued":false},{"name":"email","displayName":"${email}","validations":{"email":{},"length":{"max":255}},"annotations":{},"permissions":{"view":["admin","user"],"edit":["admin","user"]},"multivalued":false},{"name":"firstTimeLogin","displayName":"firstTimeLogin","validations":{},"annotations":{},"permissions":{"view":[],"edit":["admin"]},"multivalued":false},{"name":"firstName","displayName":"${firstName}","validations":{},"annotations":{},"permissions":{"view":[],"edit":["admin"]},"multivalued":false},{"name":"tipsEnable","displayName":"${profile.attributes.tipsEnable}","validations":{},"annotations":{},"permissions":{"view":["admin"],"edit":["admin"]},"multivalued":false},{"name":"homePage","displayName":"${profile.attributes.homePage}","validations":{},"annotations":{},"permissions":{"view":["admin","user"],"edit":["admin","user"]},"multivalued":false},{"name":"phone","displayName":"${profile.attributes.phone}","validations":{},"annotations":{},"permissions":{"view":["admin","user"],"edit":["admin","user"]},"multivalued":false}],"groups":[{"name":"user-metadata","displayHeader":"User metadata","displayDescription":"Attributes, which refer to user metadata"}]}');
 
 -- ----------------------------
 -- Table structure for composite_role
@@ -1055,7 +1056,7 @@ CREATE TABLE "public"."credential" (
 -- Records of credential
 -- ----------------------------
 INSERT INTO "public"."credential" VALUES ('d3c688d7-ec6c-4ccb-be70-9e0634124421', NULL, 'password', '0d9340a7-4bf5-4bee-9cfd-c707dfe18a22', 1729679951829, NULL, '{"value":"4oQHe1aeJV973HyDBz4zWc934X8S4exCf1yqFygUXOw=","salt":"sPygyGAMbvqJzCJnMG+eHA==","additionalParameters":{}}', '{"hashIterations":5,"algorithm":"argon2","additionalParameters":{"hashLength":["32"],"memory":["7168"],"type":["id"],"version":["1.3"],"parallelism":["1"]}}', 10);
-INSERT INTO "public"."credential" VALUES ('588747a6-3f05-497a-bc78-81b7fe3d0e93', NULL, 'password', '66b5114b-0083-48aa-860a-06f1c06ce4c4', 1734059246424, 'My password', '{"value":"nNoGFoquJMy+mtXA9WR/Nb4TPUmLEc3I88PKesj1S2U=","salt":"zj/D2SVvQ+6ictzjJp4vMQ==","additionalParameters":{}}', '{"hashIterations":5,"algorithm":"argon2","additionalParameters":{"hashLength":["32"],"memory":["7168"],"type":["id"],"version":["1.3"],"parallelism":["1"]}}', 10);
+INSERT INTO "public"."credential" VALUES ('588747a6-3f05-497a-bc78-81b7fe3d0e93', NULL, 'password', '66b5114b-0083-48aa-860a-06f1c06ce4c4', 1746512526549, 'My password', '{"value":"75zzlRwO66cfDFCPnpNS3XAZ+HF7nTR+cbj/jVSsAcA=","salt":"y5WNIOmeIfBYdGecbhKQ0Q==","additionalParameters":{}}', '{"hashIterations":5,"algorithm":"argon2","additionalParameters":{"hashLength":["32"],"memory":["7168"],"type":["id"],"version":["1.3"],"parallelism":["1"]}}', 10);
 
 -- ----------------------------
 -- Table structure for databasechangelog
@@ -1283,7 +1284,6 @@ INSERT INTO "public"."default_client_scope" VALUES ('8920b375-d705-4d30-8a71-52d
 INSERT INTO "public"."default_client_scope" VALUES ('8920b375-d705-4d30-8a71-52d9c14ec4ba', '19b9d4dd-3607-4e3a-838e-b156630fe78e', 't');
 INSERT INTO "public"."default_client_scope" VALUES ('8920b375-d705-4d30-8a71-52d9c14ec4ba', 'aab92fd1-d7b8-456c-aa9f-19c6c782260c', 't');
 INSERT INTO "public"."default_client_scope" VALUES ('8920b375-d705-4d30-8a71-52d9c14ec4ba', 'cca2f7fe-1d61-468e-a9df-83d25f108dc2', 'f');
-INSERT INTO "public"."default_client_scope" VALUES ('8920b375-d705-4d30-8a71-52d9c14ec4ba', '56c1640c-33d7-4e5f-a255-e920feab1200', 'f');
 INSERT INTO "public"."default_client_scope" VALUES ('8920b375-d705-4d30-8a71-52d9c14ec4ba', 'ad9286f6-2377-4db7-872b-5edcbef2017a', 't');
 INSERT INTO "public"."default_client_scope" VALUES ('8920b375-d705-4d30-8a71-52d9c14ec4ba', '147d0a04-66fc-49db-a1c4-fa233eb47825', 't');
 INSERT INTO "public"."default_client_scope" VALUES ('8920b375-d705-4d30-8a71-52d9c14ec4ba', 'fcc54556-ec96-4011-a89e-7c1d0ea2e714', 'f');
@@ -1292,6 +1292,8 @@ INSERT INTO "public"."default_client_scope" VALUES ('8920b375-d705-4d30-8a71-52d
 INSERT INTO "public"."default_client_scope" VALUES ('8920b375-d705-4d30-8a71-52d9c14ec4ba', 'e5d6dd73-37ab-4864-abd8-b473bc110772', 'f');
 INSERT INTO "public"."default_client_scope" VALUES ('8920b375-d705-4d30-8a71-52d9c14ec4ba', '2c26c6cb-b18b-4fd9-bbde-38d81cfaa038', 't');
 INSERT INTO "public"."default_client_scope" VALUES ('8920b375-d705-4d30-8a71-52d9c14ec4ba', '4e44f85d-bb73-4eb9-af2a-c1a641792a94', 't');
+INSERT INTO "public"."default_client_scope" VALUES ('8920b375-d705-4d30-8a71-52d9c14ec4ba', '51ec41ba-ea8b-4359-80a3-e3de154ee389', 't');
+INSERT INTO "public"."default_client_scope" VALUES ('8920b375-d705-4d30-8a71-52d9c14ec4ba', '7ee32b54-6b11-4f84-ae7a-bec36a6fd1ec', 't');
 
 -- ----------------------------
 -- Table structure for event_entity
@@ -1722,6 +1724,7 @@ CREATE TABLE "public"."migration_model" (
 INSERT INTO "public"."migration_model" VALUES ('90jhc', '26.0.1', 1729679949);
 INSERT INTO "public"."migration_model" VALUES ('snsi2', '26.0.5', 1731910076);
 INSERT INTO "public"."migration_model" VALUES ('9za6w', '26.0.7', 1733733063);
+INSERT INTO "public"."migration_model" VALUES ('iuiua', '26.0.8', 1743402888);
 
 -- ----------------------------
 -- Table structure for offline_client_session
@@ -1899,8 +1902,6 @@ INSERT INTO "public"."protocol_mapper" VALUES ('3dec4767-8ae4-44b5-a8ad-1a8f2c0f
 INSERT INTO "public"."protocol_mapper" VALUES ('09f4920e-02f1-4517-b696-330516722f74', 'email', 'openid-connect', 'oidc-usermodel-attribute-mapper', NULL, 'aab92fd1-d7b8-456c-aa9f-19c6c782260c');
 INSERT INTO "public"."protocol_mapper" VALUES ('4d5a216c-451b-42fa-906d-ea9c2af374a2', 'email verified', 'openid-connect', 'oidc-usermodel-property-mapper', NULL, 'aab92fd1-d7b8-456c-aa9f-19c6c782260c');
 INSERT INTO "public"."protocol_mapper" VALUES ('d2ad9f0c-7a84-4488-8ac8-20332f3a7a1e', 'address', 'openid-connect', 'oidc-address-mapper', NULL, 'cca2f7fe-1d61-468e-a9df-83d25f108dc2');
-INSERT INTO "public"."protocol_mapper" VALUES ('ca33b90c-eb4c-4b4a-b8eb-41c12460b71e', 'phone number', 'openid-connect', 'oidc-usermodel-attribute-mapper', NULL, '56c1640c-33d7-4e5f-a255-e920feab1200');
-INSERT INTO "public"."protocol_mapper" VALUES ('418b5dbb-dbfe-493c-bb2e-05495d0a6c4b', 'phone number verified', 'openid-connect', 'oidc-usermodel-attribute-mapper', NULL, '56c1640c-33d7-4e5f-a255-e920feab1200');
 INSERT INTO "public"."protocol_mapper" VALUES ('14ee99a6-926a-480c-a6eb-fbb84f59f0db', 'realm roles', 'openid-connect', 'oidc-usermodel-realm-role-mapper', NULL, 'ad9286f6-2377-4db7-872b-5edcbef2017a');
 INSERT INTO "public"."protocol_mapper" VALUES ('187bdc08-0f19-47f9-9805-3f96fe9c28d0', 'client roles', 'openid-connect', 'oidc-usermodel-client-role-mapper', NULL, 'ad9286f6-2377-4db7-872b-5edcbef2017a');
 INSERT INTO "public"."protocol_mapper" VALUES ('5f7337ac-2599-4806-9858-f18fec82240a', 'audience resolve', 'openid-connect', 'oidc-audience-resolve-mapper', NULL, 'ad9286f6-2377-4db7-872b-5edcbef2017a');
@@ -1917,6 +1918,8 @@ INSERT INTO "public"."protocol_mapper" VALUES ('a5d358bd-92c0-44e5-85fa-5c8a6e35
 INSERT INTO "public"."protocol_mapper" VALUES ('8bc84fef-26a9-4bf6-a94d-978d4d8bf4e3', 'Client IP Address', 'openid-connect', 'oidc-usersessionmodel-note-mapper', 'a7b53e5e-3567-470a-9da1-94cc0c7f18e6', NULL);
 INSERT INTO "public"."protocol_mapper" VALUES ('79e141a5-93e9-48c6-b1e2-2efd42aa62e8', 'firstTimeLogin', 'openid-connect', 'oidc-usermodel-attribute-mapper', NULL, '2c26c6cb-b18b-4fd9-bbde-38d81cfaa038');
 INSERT INTO "public"."protocol_mapper" VALUES ('0dee1f53-4bb9-49df-96a9-d22ece81ca32', 'tipsEnable', 'openid-connect', 'oidc-usermodel-attribute-mapper', NULL, '4e44f85d-bb73-4eb9-af2a-c1a641792a94');
+INSERT INTO "public"."protocol_mapper" VALUES ('99cc17f5-aa0a-452e-873f-d8f669fe32c8', 'homePage', 'openid-connect', 'oidc-usermodel-attribute-mapper', NULL, '51ec41ba-ea8b-4359-80a3-e3de154ee389');
+INSERT INTO "public"."protocol_mapper" VALUES ('0e4ae11e-8be7-4c4f-a742-7c725b007e4d', 'phone', 'openid-connect', 'oidc-usermodel-attribute-mapper', NULL, '7ee32b54-6b11-4f84-ae7a-bec36a6fd1ec');
 
 -- ----------------------------
 -- Table structure for protocol_mapper_config
@@ -2244,20 +2247,6 @@ INSERT INTO "public"."protocol_mapper_config" VALUES ('d2ad9f0c-7a84-4488-8ac8-2
 INSERT INTO "public"."protocol_mapper_config" VALUES ('d2ad9f0c-7a84-4488-8ac8-20332f3a7a1e', 'region', 'user.attribute.region');
 INSERT INTO "public"."protocol_mapper_config" VALUES ('d2ad9f0c-7a84-4488-8ac8-20332f3a7a1e', 'true', 'access.token.claim');
 INSERT INTO "public"."protocol_mapper_config" VALUES ('d2ad9f0c-7a84-4488-8ac8-20332f3a7a1e', 'locality', 'user.attribute.locality');
-INSERT INTO "public"."protocol_mapper_config" VALUES ('418b5dbb-dbfe-493c-bb2e-05495d0a6c4b', 'true', 'introspection.token.claim');
-INSERT INTO "public"."protocol_mapper_config" VALUES ('418b5dbb-dbfe-493c-bb2e-05495d0a6c4b', 'true', 'userinfo.token.claim');
-INSERT INTO "public"."protocol_mapper_config" VALUES ('418b5dbb-dbfe-493c-bb2e-05495d0a6c4b', 'phoneNumberVerified', 'user.attribute');
-INSERT INTO "public"."protocol_mapper_config" VALUES ('418b5dbb-dbfe-493c-bb2e-05495d0a6c4b', 'true', 'id.token.claim');
-INSERT INTO "public"."protocol_mapper_config" VALUES ('418b5dbb-dbfe-493c-bb2e-05495d0a6c4b', 'true', 'access.token.claim');
-INSERT INTO "public"."protocol_mapper_config" VALUES ('418b5dbb-dbfe-493c-bb2e-05495d0a6c4b', 'phone_number_verified', 'claim.name');
-INSERT INTO "public"."protocol_mapper_config" VALUES ('418b5dbb-dbfe-493c-bb2e-05495d0a6c4b', 'boolean', 'jsonType.label');
-INSERT INTO "public"."protocol_mapper_config" VALUES ('ca33b90c-eb4c-4b4a-b8eb-41c12460b71e', 'true', 'introspection.token.claim');
-INSERT INTO "public"."protocol_mapper_config" VALUES ('ca33b90c-eb4c-4b4a-b8eb-41c12460b71e', 'true', 'userinfo.token.claim');
-INSERT INTO "public"."protocol_mapper_config" VALUES ('ca33b90c-eb4c-4b4a-b8eb-41c12460b71e', 'phoneNumber', 'user.attribute');
-INSERT INTO "public"."protocol_mapper_config" VALUES ('ca33b90c-eb4c-4b4a-b8eb-41c12460b71e', 'true', 'id.token.claim');
-INSERT INTO "public"."protocol_mapper_config" VALUES ('ca33b90c-eb4c-4b4a-b8eb-41c12460b71e', 'true', 'access.token.claim');
-INSERT INTO "public"."protocol_mapper_config" VALUES ('ca33b90c-eb4c-4b4a-b8eb-41c12460b71e', 'phone_number', 'claim.name');
-INSERT INTO "public"."protocol_mapper_config" VALUES ('ca33b90c-eb4c-4b4a-b8eb-41c12460b71e', 'String', 'jsonType.label');
 INSERT INTO "public"."protocol_mapper_config" VALUES ('14ee99a6-926a-480c-a6eb-fbb84f59f0db', 'true', 'introspection.token.claim');
 INSERT INTO "public"."protocol_mapper_config" VALUES ('14ee99a6-926a-480c-a6eb-fbb84f59f0db', 'true', 'multivalued');
 INSERT INTO "public"."protocol_mapper_config" VALUES ('14ee99a6-926a-480c-a6eb-fbb84f59f0db', 'foo', 'user.attribute');
@@ -2348,6 +2337,23 @@ INSERT INTO "public"."protocol_mapper_config" VALUES ('0dee1f53-4bb9-49df-96a9-d
 INSERT INTO "public"."protocol_mapper_config" VALUES ('0dee1f53-4bb9-49df-96a9-d22ece81ca32', 'true', 'access.token.claim');
 INSERT INTO "public"."protocol_mapper_config" VALUES ('0dee1f53-4bb9-49df-96a9-d22ece81ca32', 'tipsEnable', 'claim.name');
 INSERT INTO "public"."protocol_mapper_config" VALUES ('0dee1f53-4bb9-49df-96a9-d22ece81ca32', 'int', 'jsonType.label');
+INSERT INTO "public"."protocol_mapper_config" VALUES ('99cc17f5-aa0a-452e-873f-d8f669fe32c8', 'true', 'introspection.token.claim');
+INSERT INTO "public"."protocol_mapper_config" VALUES ('99cc17f5-aa0a-452e-873f-d8f669fe32c8', 'true', 'userinfo.token.claim');
+INSERT INTO "public"."protocol_mapper_config" VALUES ('99cc17f5-aa0a-452e-873f-d8f669fe32c8', 'homePage', 'user.attribute');
+INSERT INTO "public"."protocol_mapper_config" VALUES ('99cc17f5-aa0a-452e-873f-d8f669fe32c8', 'true', 'id.token.claim');
+INSERT INTO "public"."protocol_mapper_config" VALUES ('99cc17f5-aa0a-452e-873f-d8f669fe32c8', 'false', 'lightweight.claim');
+INSERT INTO "public"."protocol_mapper_config" VALUES ('99cc17f5-aa0a-452e-873f-d8f669fe32c8', 'true', 'access.token.claim');
+INSERT INTO "public"."protocol_mapper_config" VALUES ('99cc17f5-aa0a-452e-873f-d8f669fe32c8', 'homePage', 'claim.name');
+INSERT INTO "public"."protocol_mapper_config" VALUES ('99cc17f5-aa0a-452e-873f-d8f669fe32c8', 'String', 'jsonType.label');
+INSERT INTO "public"."protocol_mapper_config" VALUES ('0e4ae11e-8be7-4c4f-a742-7c725b007e4d', 'true', 'introspection.token.claim');
+INSERT INTO "public"."protocol_mapper_config" VALUES ('0e4ae11e-8be7-4c4f-a742-7c725b007e4d', 'true', 'userinfo.token.claim');
+INSERT INTO "public"."protocol_mapper_config" VALUES ('0e4ae11e-8be7-4c4f-a742-7c725b007e4d', 'phone', 'user.attribute');
+INSERT INTO "public"."protocol_mapper_config" VALUES ('0e4ae11e-8be7-4c4f-a742-7c725b007e4d', 'true', 'id.token.claim');
+INSERT INTO "public"."protocol_mapper_config" VALUES ('0e4ae11e-8be7-4c4f-a742-7c725b007e4d', 'false', 'lightweight.claim');
+INSERT INTO "public"."protocol_mapper_config" VALUES ('0e4ae11e-8be7-4c4f-a742-7c725b007e4d', 'true', 'access.token.claim');
+INSERT INTO "public"."protocol_mapper_config" VALUES ('0e4ae11e-8be7-4c4f-a742-7c725b007e4d', 'phone', 'claim.name');
+INSERT INTO "public"."protocol_mapper_config" VALUES ('0e4ae11e-8be7-4c4f-a742-7c725b007e4d', 'String', 'jsonType.label');
+
 
 -- ----------------------------
 -- Table structure for realm
@@ -3022,49 +3028,84 @@ CREATE TABLE "public"."resource_uris" (
 -- 默认：216ea471-fa25-441c-bbd3-3b14ae956db1
 -- ----------------------------
 INSERT INTO "public"."resource_uris" VALUES ('db264c45-2289-4a35-a8ce-6d6f6e98753c', '/*');
+INSERT INTO "public"."resource_uris" VALUES ('8852fd44-b67e-4d11-9ab6-f05b9bf32f7c', '/inter-api/supos');
+INSERT INTO "public"."resource_uris" VALUES ('8852fd44-b67e-4d11-9ab6-f05b9bf32f7c', '/AppManagement');
+INSERT INTO "public"."resource_uris" VALUES ('8852fd44-b67e-4d11-9ab6-f05b9bf32f7c', '/CollectionGatewayManagement');
+INSERT INTO "public"."resource_uris" VALUES ('8852fd44-b67e-4d11-9ab6-f05b9bf32f7c', '/NotificationManagement');
+INSERT INTO "public"."resource_uris" VALUES ('8852fd44-b67e-4d11-9ab6-f05b9bf32f7c', '/OpenData');
+INSERT INTO "public"."resource_uris" VALUES ('8852fd44-b67e-4d11-9ab6-f05b9bf32f7c', '/plugin-management');
+INSERT INTO "public"."resource_uris" VALUES ('8852fd44-b67e-4d11-9ab6-f05b9bf32f7c', '/404');
+INSERT INTO "public"."resource_uris" VALUES ('8852fd44-b67e-4d11-9ab6-f05b9bf32f7c', '/403');
+INSERT INTO "public"."resource_uris" VALUES ('8852fd44-b67e-4d11-9ab6-f05b9bf32f7c', '/chat2db');
 INSERT INTO "public"."resource_uris" VALUES ('8852fd44-b67e-4d11-9ab6-f05b9bf32f7c', '/AdvancedUse');
+INSERT INTO "public"."resource_uris" VALUES ('8852fd44-b67e-4d11-9ab6-f05b9bf32f7c', '/dashboards');
+INSERT INTO "public"."resource_uris" VALUES ('8852fd44-b67e-4d11-9ab6-f05b9bf32f7c', '/AboutUs');
+INSERT INTO "public"."resource_uris" VALUES ('8852fd44-b67e-4d11-9ab6-f05b9bf32f7c', '/ElasticSearch');
+INSERT INTO "public"."resource_uris" VALUES ('8852fd44-b67e-4d11-9ab6-f05b9bf32f7c', '/CopilotKit');
+INSERT INTO "public"."resource_uris" VALUES ('8852fd44-b67e-4d11-9ab6-f05b9bf32f7c', '/ObjectStorageServer');
+INSERT INTO "public"."resource_uris" VALUES ('8852fd44-b67e-4d11-9ab6-f05b9bf32f7c', '/StreamProcessing');
+INSERT INTO "public"."resource_uris" VALUES ('8852fd44-b67e-4d11-9ab6-f05b9bf32f7c', '/GenApps');
+INSERT INTO "public"."resource_uris" VALUES ('8852fd44-b67e-4d11-9ab6-f05b9bf32f7c', '/account-management');
+INSERT INTO "public"."resource_uris" VALUES ('8852fd44-b67e-4d11-9ab6-f05b9bf32f7c', '/open-api-docs');
+INSERT INTO "public"."resource_uris" VALUES ('8852fd44-b67e-4d11-9ab6-f05b9bf32f7c', '/MqttBroker');
+INSERT INTO "public"."resource_uris" VALUES ('8852fd44-b67e-4d11-9ab6-f05b9bf32f7c', '/AutoDashboard');
+INSERT INTO "public"."resource_uris" VALUES ('8852fd44-b67e-4d11-9ab6-f05b9bf32f7c', '/Grafana');
+INSERT INTO "public"."resource_uris" VALUES ('8852fd44-b67e-4d11-9ab6-f05b9bf32f7c', '/Home');
+INSERT INTO "public"."resource_uris" VALUES ('8852fd44-b67e-4d11-9ab6-f05b9bf32f7c', '/notification-management');
+INSERT INTO "public"."resource_uris" VALUES ('8852fd44-b67e-4d11-9ab6-f05b9bf32f7c', '/app-management');
+INSERT INTO "public"."resource_uris" VALUES ('8852fd44-b67e-4d11-9ab6-f05b9bf32f7c', '/app-display');
+INSERT INTO "public"."resource_uris" VALUES ('8852fd44-b67e-4d11-9ab6-f05b9bf32f7c', 'button:*');
+INSERT INTO "public"."resource_uris" VALUES ('8852fd44-b67e-4d11-9ab6-f05b9bf32f7c', '/Alert');
+INSERT INTO "public"."resource_uris" VALUES ('8852fd44-b67e-4d11-9ab6-f05b9bf32f7c', '/DBConnect');
+INSERT INTO "public"."resource_uris" VALUES ('8852fd44-b67e-4d11-9ab6-f05b9bf32f7c', '/Streams');
+INSERT INTO "public"."resource_uris" VALUES ('8852fd44-b67e-4d11-9ab6-f05b9bf32f7c', '/Portainer');
+INSERT INTO "public"."resource_uris" VALUES ('8852fd44-b67e-4d11-9ab6-f05b9bf32f7c', '/assets');
+INSERT INTO "public"."resource_uris" VALUES ('8852fd44-b67e-4d11-9ab6-f05b9bf32f7c', '/Emqx');
+INSERT INTO "public"."resource_uris" VALUES ('8852fd44-b67e-4d11-9ab6-f05b9bf32f7c', '/grafana-design');
+INSERT INTO "public"."resource_uris" VALUES ('8852fd44-b67e-4d11-9ab6-f05b9bf32f7c', '/DockerMgmt');
+INSERT INTO "public"."resource_uris" VALUES ('8852fd44-b67e-4d11-9ab6-f05b9bf32f7c', '/Authentication');
+INSERT INTO "public"."resource_uris" VALUES ('8852fd44-b67e-4d11-9ab6-f05b9bf32f7c', '/alert');
+INSERT INTO "public"."resource_uris" VALUES ('8852fd44-b67e-4d11-9ab6-f05b9bf32f7c', '/connection-flow');
+INSERT INTO "public"."resource_uris" VALUES ('8852fd44-b67e-4d11-9ab6-f05b9bf32f7c', '/Gitea');
+INSERT INTO "public"."resource_uris" VALUES ('8852fd44-b67e-4d11-9ab6-f05b9bf32f7c', '/todo');
+INSERT INTO "public"."resource_uris" VALUES ('8852fd44-b67e-4d11-9ab6-f05b9bf32f7c', '/advanced-use');
+INSERT INTO "public"."resource_uris" VALUES ('8852fd44-b67e-4d11-9ab6-f05b9bf32f7c', '/EventFlow');
 INSERT INTO "public"."resource_uris" VALUES ('8852fd44-b67e-4d11-9ab6-f05b9bf32f7c', '/McpClient');
 INSERT INTO "public"."resource_uris" VALUES ('8852fd44-b67e-4d11-9ab6-f05b9bf32f7c', '/CICD');
 INSERT INTO "public"."resource_uris" VALUES ('8852fd44-b67e-4d11-9ab6-f05b9bf32f7c', '/UserManagement');
 INSERT INTO "public"."resource_uris" VALUES ('8852fd44-b67e-4d11-9ab6-f05b9bf32f7c', '/GenerativeUI');
 INSERT INTO "public"."resource_uris" VALUES ('8852fd44-b67e-4d11-9ab6-f05b9bf32f7c', '/Logs');
 INSERT INTO "public"."resource_uris" VALUES ('8852fd44-b67e-4d11-9ab6-f05b9bf32f7c', '/menu.account');
-INSERT INTO "public"."resource_uris" VALUES ('8852fd44-b67e-4d11-9ab6-f05b9bf32f7c', '/AboutUs');
-INSERT INTO "public"."resource_uris" VALUES ('8852fd44-b67e-4d11-9ab6-f05b9bf32f7c', '/ElasticSearch');
-INSERT INTO "public"."resource_uris" VALUES ('8852fd44-b67e-4d11-9ab6-f05b9bf32f7c', '/elastic');
-INSERT INTO "public"."resource_uris" VALUES ('8852fd44-b67e-4d11-9ab6-f05b9bf32f7c', '/CopilotKit');
 INSERT INTO "public"."resource_uris" VALUES ('8852fd44-b67e-4d11-9ab6-f05b9bf32f7c', '/flow-editor');
-INSERT INTO "public"."resource_uris" VALUES ('8852fd44-b67e-4d11-9ab6-f05b9bf32f7c', '/ObjectStorageServer');
-INSERT INTO "public"."resource_uris" VALUES ('8852fd44-b67e-4d11-9ab6-f05b9bf32f7c', '/StreamProcessing');
-INSERT INTO "public"."resource_uris" VALUES ('8852fd44-b67e-4d11-9ab6-f05b9bf32f7c', '/GenApps');
-INSERT INTO "public"."resource_uris" VALUES ('8852fd44-b67e-4d11-9ab6-f05b9bf32f7c', '/account-management');
+INSERT INTO "public"."resource_uris" VALUES ('8852fd44-b67e-4d11-9ab6-f05b9bf32f7c', '/home');
 INSERT INTO "public"."resource_uris" VALUES ('8852fd44-b67e-4d11-9ab6-f05b9bf32f7c', '/Dashboards');
-INSERT INTO "public"."resource_uris" VALUES ('8852fd44-b67e-4d11-9ab6-f05b9bf32f7c', '/MqttBroker');
 INSERT INTO "public"."resource_uris" VALUES ('8852fd44-b67e-4d11-9ab6-f05b9bf32f7c', '/Collection-Flow');
 INSERT INTO "public"."resource_uris" VALUES ('8852fd44-b67e-4d11-9ab6-f05b9bf32f7c', '/DbConnect');
-INSERT INTO "public"."resource_uris" VALUES ('8852fd44-b67e-4d11-9ab6-f05b9bf32f7c', '/AutoDashboard');
-INSERT INTO "public"."resource_uris" VALUES ('8852fd44-b67e-4d11-9ab6-f05b9bf32f7c', '/Grafana');
+INSERT INTO "public"."resource_uris" VALUES ('8852fd44-b67e-4d11-9ab6-f05b9bf32f7c', '/CodeManagement');
 INSERT INTO "public"."resource_uris" VALUES ('8852fd44-b67e-4d11-9ab6-f05b9bf32f7c', '/AccountManagement');
-INSERT INTO "public"."resource_uris" VALUES ('8852fd44-b67e-4d11-9ab6-f05b9bf32f7c', '/Home');
-INSERT INTO "public"."resource_uris" VALUES ('8852fd44-b67e-4d11-9ab6-f05b9bf32f7c', 'button:*');
-INSERT INTO "public"."resource_uris" VALUES ('8852fd44-b67e-4d11-9ab6-f05b9bf32f7c', '/Alert');
+INSERT INTO "public"."resource_uris" VALUES ('8852fd44-b67e-4d11-9ab6-f05b9bf32f7c', '/collection-flow');
 INSERT INTO "public"."resource_uris" VALUES ('8852fd44-b67e-4d11-9ab6-f05b9bf32f7c', '/SQLEditor');
 INSERT INTO "public"."resource_uris" VALUES ('8852fd44-b67e-4d11-9ab6-f05b9bf32f7c', '/UNS');
-INSERT INTO "public"."resource_uris" VALUES ('8852fd44-b67e-4d11-9ab6-f05b9bf32f7c', '/Streams');
 INSERT INTO "public"."resource_uris" VALUES ('8852fd44-b67e-4d11-9ab6-f05b9bf32f7c', '/fuxa');
-INSERT INTO "public"."resource_uris" VALUES ('8852fd44-b67e-4d11-9ab6-f05b9bf32f7c', '/Portainer');
 INSERT INTO "public"."resource_uris" VALUES ('8852fd44-b67e-4d11-9ab6-f05b9bf32f7c', '/swagger-ui');
-INSERT INTO "public"."resource_uris" VALUES ('8852fd44-b67e-4d11-9ab6-f05b9bf32f7c', '/assets');
-INSERT INTO "public"."resource_uris" VALUES ('8852fd44-b67e-4d11-9ab6-f05b9bf32f7c', '/Emqx');
-INSERT INTO "public"."resource_uris" VALUES ('8852fd44-b67e-4d11-9ab6-f05b9bf32f7c', '/grafana-design');
 INSERT INTO "public"."resource_uris" VALUES ('8852fd44-b67e-4d11-9ab6-f05b9bf32f7c', '/RoutingManagement');
-INSERT INTO "public"."resource_uris" VALUES ('8852fd44-b67e-4d11-9ab6-f05b9bf32f7c', '/DockerMgmt');
-INSERT INTO "public"."resource_uris" VALUES ('8852fd44-b67e-4d11-9ab6-f05b9bf32f7c', '/Authentication');
-INSERT INTO "public"."resource_uris" VALUES ('8852fd44-b67e-4d11-9ab6-f05b9bf32f7c', '/connection-flow');
+INSERT INTO "public"."resource_uris" VALUES ('8852fd44-b67e-4d11-9ab6-f05b9bf32f7c', '/code-management');
 INSERT INTO "public"."resource_uris" VALUES ('8852fd44-b67e-4d11-9ab6-f05b9bf32f7c', '/SourceFlow');
-INSERT INTO "public"."resource_uris" VALUES ('8852fd44-b67e-4d11-9ab6-f05b9bf32f7c', '/Gitea');
+INSERT INTO "public"."resource_uris" VALUES ('8852fd44-b67e-4d11-9ab6-f05b9bf32f7c', '/app-space');
 INSERT INTO "public"."resource_uris" VALUES ('8852fd44-b67e-4d11-9ab6-f05b9bf32f7c', '/ContainerManagement');
+INSERT INTO "public"."resource_uris" VALUES ('8852fd44-b67e-4d11-9ab6-f05b9bf32f7c', '/Apm');
+INSERT INTO "public"."resource_uris" VALUES ('8852fd44-b67e-4d11-9ab6-f05b9bf32f7c', '/uns');
+INSERT INTO "public"."resource_uris" VALUES ('8852fd44-b67e-4d11-9ab6-f05b9bf32f7c', '/Konga');
+INSERT INTO "public"."resource_uris" VALUES ('8852fd44-b67e-4d11-9ab6-f05b9bf32f7c', '/Namespace');
+INSERT INTO "public"."resource_uris" VALUES ('8852fd44-b67e-4d11-9ab6-f05b9bf32f7c', '/aboutus');
+INSERT INTO "public"."resource_uris" VALUES ('8852fd44-b67e-4d11-9ab6-f05b9bf32f7c', '/GraphQL');
+INSERT INTO "public"."resource_uris" VALUES ('8852fd44-b67e-4d11-9ab6-f05b9bf32f7c', '/nodered');
+INSERT INTO "public"."resource_uris" VALUES ('8852fd44-b67e-4d11-9ab6-f05b9bf32f7c', '/open-data');
+INSERT INTO "public"."resource_uris" VALUES ('8852fd44-b67e-4d11-9ab6-f05b9bf32f7c', '/WebHooks');
 INSERT INTO "public"."resource_uris" VALUES ('216ea471-fa25-441c-bbd3-3b14ae956db1', '/McpClient');
+INSERT INTO "public"."resource_uris" VALUES ('216ea471-fa25-441c-bbd3-3b14ae956db1', '/plugin-management');
+INSERT INTO "public"."resource_uris" VALUES ('216ea471-fa25-441c-bbd3-3b14ae956db1', '/404');
+INSERT INTO "public"."resource_uris" VALUES ('216ea471-fa25-441c-bbd3-3b14ae956db1', '/403');
 INSERT INTO "public"."resource_uris" VALUES ('216ea471-fa25-441c-bbd3-3b14ae956db1', '/nodered');
 INSERT INTO "public"."resource_uris" VALUES ('216ea471-fa25-441c-bbd3-3b14ae956db1', '/GenerativeUI');
 INSERT INTO "public"."resource_uris" VALUES ('216ea471-fa25-441c-bbd3-3b14ae956db1', '/AboutUs');
@@ -3081,8 +3122,14 @@ INSERT INTO "public"."resource_uris" VALUES ('216ea471-fa25-441c-bbd3-3b14ae956d
 INSERT INTO "public"."resource_uris" VALUES ('216ea471-fa25-441c-bbd3-3b14ae956db1', '/UNS');
 INSERT INTO "public"."resource_uris" VALUES ('216ea471-fa25-441c-bbd3-3b14ae956db1', '/fuxa');
 INSERT INTO "public"."resource_uris" VALUES ('216ea471-fa25-441c-bbd3-3b14ae956db1', '/swagger-ui');
+INSERT INTO "public"."resource_uris" VALUES ('216ea471-fa25-441c-bbd3-3b14ae956db1', '/open-api-docs');
 INSERT INTO "public"."resource_uris" VALUES ('216ea471-fa25-441c-bbd3-3b14ae956db1', '/assets');
 INSERT INTO "public"."resource_uris" VALUES ('216ea471-fa25-441c-bbd3-3b14ae956db1', '/grafana-design');
+INSERT INTO "public"."resource_uris" VALUES ('216ea471-fa25-441c-bbd3-3b14ae956db1', '/collection-gateway-management');
+INSERT INTO "public"."resource_uris" VALUES ('216ea471-fa25-441c-bbd3-3b14ae956db1', '/CollectionGatewayManagement');
+INSERT INTO "public"."resource_uris" VALUES ('216ea471-fa25-441c-bbd3-3b14ae956db1', '/collection-gateway-detail');
+INSERT INTO "public"."resource_uris" VALUES ('216ea471-fa25-441c-bbd3-3b14ae956db1', '/CodeManagement');
+INSERT INTO "public"."resource_uris" VALUES ('216ea471-fa25-441c-bbd3-3b14ae956db1', '/code-management');
 INSERT INTO "public"."resource_uris" VALUES ('216ea471-fa25-441c-bbd3-3b14ae956db1', '/hasura');
 INSERT INTO "public"."resource_uris" VALUES ('216ea471-fa25-441c-bbd3-3b14ae956db1', '/connection-flow');
 INSERT INTO "public"."resource_uris" VALUES ('216ea471-fa25-441c-bbd3-3b14ae956db1', '/SourceFlow');
@@ -3093,13 +3140,14 @@ INSERT INTO "public"."resource_uris" VALUES ('216ea471-fa25-441c-bbd3-3b14ae956d
 INSERT INTO "public"."resource_uris" VALUES ('216ea471-fa25-441c-bbd3-3b14ae956db1', '/flow-editor');
 INSERT INTO "public"."resource_uris" VALUES ('216ea471-fa25-441c-bbd3-3b14ae956db1', '/EvenFlowEditor');
 INSERT INTO "public"."resource_uris" VALUES ('216ea471-fa25-441c-bbd3-3b14ae956db1', '/chat2db');
-INSERT INTO "public"."resource_uris" VALUES ('8852fd44-b67e-4d11-9ab6-f05b9bf32f7c', '/Apm');
-INSERT INTO "public"."resource_uris" VALUES ('8852fd44-b67e-4d11-9ab6-f05b9bf32f7c', '/todo');
-INSERT INTO "public"."resource_uris" VALUES ('8852fd44-b67e-4d11-9ab6-f05b9bf32f7c', '/Konga');
-INSERT INTO "public"."resource_uris" VALUES ('8852fd44-b67e-4d11-9ab6-f05b9bf32f7c', '/Namespace');
-INSERT INTO "public"."resource_uris" VALUES ('8852fd44-b67e-4d11-9ab6-f05b9bf32f7c', '/EvenFlowEditor');
-INSERT INTO "public"."resource_uris" VALUES ('8852fd44-b67e-4d11-9ab6-f05b9bf32f7c', '/GraphQL');
-INSERT INTO "public"."resource_uris" VALUES ('8852fd44-b67e-4d11-9ab6-f05b9bf32f7c', '/EventFlow');
+INSERT INTO "public"."resource_uris" VALUES ('77f52ac5-58cf-4d4b-b850-aa0ac0ace1b7', '/collection-gateway-management');
+INSERT INTO "public"."resource_uris" VALUES ('77f52ac5-58cf-4d4b-b850-aa0ac0ace1b7', '/plugin-management');
+INSERT INTO "public"."resource_uris" VALUES ('77f52ac5-58cf-4d4b-b850-aa0ac0ace1b7', '/404');
+INSERT INTO "public"."resource_uris" VALUES ('77f52ac5-58cf-4d4b-b850-aa0ac0ace1b7', '/403');
+INSERT INTO "public"."resource_uris" VALUES ('77f52ac5-58cf-4d4b-b850-aa0ac0ace1b7', '/CollectionGatewayManagement');
+INSERT INTO "public"."resource_uris" VALUES ('77f52ac5-58cf-4d4b-b850-aa0ac0ace1b7', '/collection-gateway-detail');
+INSERT INTO "public"."resource_uris" VALUES ('77f52ac5-58cf-4d4b-b850-aa0ac0ace1b7', '/CodeManagement');
+INSERT INTO "public"."resource_uris" VALUES ('77f52ac5-58cf-4d4b-b850-aa0ac0ace1b7', '/code-management');
 INSERT INTO "public"."resource_uris" VALUES ('77f52ac5-58cf-4d4b-b850-aa0ac0ace1b7', '/AdvancedUse');
 INSERT INTO "public"."resource_uris" VALUES ('77f52ac5-58cf-4d4b-b850-aa0ac0ace1b7', '/McpClient');
 INSERT INTO "public"."resource_uris" VALUES ('77f52ac5-58cf-4d4b-b850-aa0ac0ace1b7', '/CICD');
@@ -3121,6 +3169,7 @@ INSERT INTO "public"."resource_uris" VALUES ('77f52ac5-58cf-4d4b-b850-aa0ac0ace1
 INSERT INTO "public"."resource_uris" VALUES ('77f52ac5-58cf-4d4b-b850-aa0ac0ace1b7', '/UNS');
 INSERT INTO "public"."resource_uris" VALUES ('77f52ac5-58cf-4d4b-b850-aa0ac0ace1b7', '/fuxa');
 INSERT INTO "public"."resource_uris" VALUES ('77f52ac5-58cf-4d4b-b850-aa0ac0ace1b7', '/swagger-ui');
+INSERT INTO "public"."resource_uris" VALUES ('77f52ac5-58cf-4d4b-b850-aa0ac0ace1b7', '/open-api-docs');
 INSERT INTO "public"."resource_uris" VALUES ('77f52ac5-58cf-4d4b-b850-aa0ac0ace1b7', '/RoutingManagement');
 INSERT INTO "public"."resource_uris" VALUES ('77f52ac5-58cf-4d4b-b850-aa0ac0ace1b7', '/Authentication');
 INSERT INTO "public"."resource_uris" VALUES ('77f52ac5-58cf-4d4b-b850-aa0ac0ace1b7', '/connection-flow');
@@ -3210,14 +3259,12 @@ CREATE TABLE "public"."user_attribute" (
 ;
 
 -- ----------------------------
--- Records of user_attribute
+-- Records of user_attribute supos帐号ID:66b5114b-0083-48aa-860a-06f1c06ce4c4
 -- ----------------------------
 INSERT INTO "public"."user_attribute" VALUES ('is_temporary_admin', 'true', '0d9340a7-4bf5-4bee-9cfd-c707dfe18a22', '0aec3e55-afa5-445b-9a5c-7a9e6831ea8a', NULL, NULL, NULL);
 INSERT INTO "public"."user_attribute" VALUES ('locale', 'en', '0d9340a7-4bf5-4bee-9cfd-c707dfe18a22', 'd1e522d0-bf12-44f2-9c6c-bd02142d0c8f', NULL, NULL, NULL);
-INSERT INTO "public"."user_attribute" VALUES ('locale', 'LANGUAGE_VAR', '66b5114b-0083-48aa-860a-06f1c06ce4c4', 'ad3ec41b-fd7a-4055-abe5-82d5f9b6d2ee', NULL, NULL, NULL);
 INSERT INTO "public"."user_attribute" VALUES ('firstTimeLogin', '0', '66b5114b-0083-48aa-860a-06f1c06ce4c4', 'ee4aeb11-50e6-4fc6-a451-a609b7a0e2b1', NULL, NULL, NULL);
-INSERT INTO "public"."user_attribute" VALUES ('tipsEnable', '0', '66b5114b-0083-48aa-860a-06f1c06ce4c4', '153af576-cdb3-46c8-b465-209f7f2dd355', NULL, NULL, NULL);
-
+INSERT INTO "public"."user_attribute" VALUES ('tipsEnable', '0', '66b5114b-0083-48aa-860a-06f1c06ce4c4', '05a97492-1c04-49da-a3db-070981d55c97', NULL, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for user_consent
@@ -3278,7 +3325,7 @@ CREATE TABLE "public"."user_entity" (
 -- ----------------------------
 INSERT INTO "public"."user_entity" VALUES ('0d9340a7-4bf5-4bee-9cfd-c707dfe18a22', 'yuwenhao@freezonex.io', 'yuwenhao@freezonex.io', 'f', 't', NULL, NULL, NULL, 'ef0cad76-cbcc-4c42-92d7-ef8685b7e724', 'admin', 1729679951639, NULL, 0);
 INSERT INTO "public"."user_entity" VALUES ('92209a7e-1e8d-486e-9e27-92585f68e5a8', NULL, 'e4b65485-792f-4bb1-b087-f83b00435a77', 'f', 't', NULL, NULL, NULL, '8920b375-d705-4d30-8a71-52d9c14ec4ba', 'service-account-supos', 1733364065211, 'a7b53e5e-3567-470a-9da1-94cc0c7f18e6', 0);
-INSERT INTO "public"."user_entity" VALUES ('66b5114b-0083-48aa-860a-06f1c06ce4c4', 'supos@supos.com', 'supos@supos.com', 'f', 't', NULL, NULL, NULL, '8920b375-d705-4d30-8a71-52d9c14ec4ba', 'supos', 1734059221040, NULL, 0);
+INSERT INTO "public"."user_entity" VALUES ('66b5114b-0083-48aa-860a-06f1c06ce4c4', NULL, '7b2fe8c0-47f1-4bbd-bcf1-58ee824dc516', 'f', 't', NULL, NULL, NULL, '8920b375-d705-4d30-8a71-52d9c14ec4ba', 'supos', 1734059221040, NULL, 0);
 
 -- ----------------------------
 -- Table structure for user_federation_config

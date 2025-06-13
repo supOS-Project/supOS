@@ -433,7 +433,7 @@ module.exports = {
              * added to the end of the palette.
              * If not set, the following default order is used:
              */
-            categories: ['supNodes', 'subflows', 'common', 'function', 'network', 'sequence', 'parser', 'storage'],
+            categories: ['supnodes', 'subflows', 'common', 'function', 'network', 'sequence', 'parser', 'storage'],
         },
 
         projects: {

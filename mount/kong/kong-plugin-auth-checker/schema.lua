@@ -21,6 +21,7 @@ return {
                   "^/logo.*$",
                   "^/files.*$",
                   "^/supos-login.*$",
+                  "^/nodered.*$",
                   "/403"
               },
           },

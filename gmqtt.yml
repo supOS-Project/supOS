@@ -1,0 +1,29 @@
+services:
+  emqx:
+    image: eco-registry.supos.com/sup9bnlh/gmqtt:v0.9
+    container_name: emqx
+    ports:
+      - "1883:1883"   # MQTT端口
+      - "8883:8883"   # MQTT加密端口
+      - "8083:8083"   # WebSocket端口
+      - "8084:8084"   # WebSocket加密端口
+      - "18083:18083" # EMQX Dashboard端口
+      - "8082:8082"   # gmqtt metrics 端口
+    environment:
+      - EMQX_NAME=emqx
+      - EMQX_NODE__COOKIE=secretcookie # 节点通信时的cookie
+      - service_logo=emqx-original.svg
+      - service_description=aboutus.emqxDescription
+      - service_account=admin
+      - service_password=public
+      - SYS_OS_USE_ALIAS_PATH_AS_TOPIC=${USE_ALIAS_PATH_AS_TOPIC}
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${VOLUMES_PATH}/emqx/:/etc/gmqtt/
+      - ${VOLUMES_PATH}/emqx/log:/gmqttd/logs
+    restart: always
+    depends_on:
+      postgresql:
+        condition: service_healthy  # 依赖 PostgreSQL 的 uns 定义
+    networks:
+      - default_network

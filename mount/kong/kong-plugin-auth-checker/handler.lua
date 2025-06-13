@@ -47,11 +47,29 @@ local function forbidden(redirect_url)
   end
 end
 
+-- 定义函数来判断 currentMethod 是否在 methods 数组中 true存在，false不存在
+local function isMethodMatched(methodList, currentMethod)
+  -- 检查methodList是否为空或是空数组
+  if not methodList or #methodList == 0 then
+    return true
+  end
+
+  -- 遍历methodList，检查是否有匹配的method
+  for _, method in ipairs(methodList) do
+    if method == currentMethod then
+      return true
+    end
+  end
+
+  return false
+end
+
 
 -- 处理请求的访问逻辑
 function plugin:access(conf)
   local current_path = ngx.var.uri  -- 获取当前请求路径
-  --ngx.log(ngx.ERR,">>>>>>>>>>>>当前请求路径：",current_path)
+  local current_method = string.lower(ngx.req.get_method()) -- 获取当前请求方法
+  --ngx.log(ngx.ERR, ">>>>>>>>>>>>当前请求方法：", current_method, " 当前请求路径：", current_path)
 
   -- 检查是否在白名单路径中
   if is_whitelisted_path(current_path, conf.whitelist_paths) then
@@ -88,50 +106,56 @@ function plugin:access(conf)
   })
 
   if not res or res.status ~= 200 then
-    ngx.log(ngx.ERR, "Error sending request to backend: ", err)
+    ngx.log(ngx.ERR, ">>>>>>> 请求backend接口失败: ", err)
     --return ngx.exit(ngx.HTTP_UNAUTHORIZED)  -- 如果请求失败，返回 401
     return unauthorized(conf.login_url)
   end
 
-  ------------------拒绝策略--------------------------
+  local success, json_data = pcall(cjson.decode, res.body)
+
+  if not success then
+    ngx.log(ngx.ERR, "解析backend返回JSON失败 response: ", json_data)
+    return ngx.exit(ngx.HTTP_INTERNAL_SERVER_ERROR)
+  end
+
+  if json_data.data.superAdmin == true then
+    ngx.log(ngx.INFO, "当前用户为超级管理员，直接放行")
+    return
+  end
+
+    ------------------拒绝策略--------------------------
   --ngx.log(ngx.ERR, ">>>>>>>>>>>>>>资源权限校验开关: ", conf.enable_resource_check)
   if conf.enable_deny_check then
     -- 解析接口返回的 JSON 数据
-    local deny_paths = {}
     local success, json_data = pcall(cjson.decode, res.body)
 
     if not success then
-      ngx.log(ngx.ERR, "Error parsing JSON response: ", json_data)
+      ngx.log(ngx.ERR, "解析backend返回JSON失败 response: ", json_data)
       return ngx.exit(ngx.HTTP_INTERNAL_SERVER_ERROR)
     end
+
+    -- 判断请求路径是否在 deny_paths 中
+    local is_deny_uri = false
+    local is_deny_method = false
 
     if json_data.data.denyResourceList and #json_data.data.denyResourceList > 0 then
       -- 提取 denyResourceList 中的 uri 并构建 deny_paths 数组
       for _, resource in ipairs(json_data.data.denyResourceList) do
-        if isNotEmpty(resource.uri) then
-          table.insert(deny_paths, resource.uri)
+        local lower_deny_path = string.lower(resource.uri)
+        current_path = current_path:gsub("-", "")
+        current_path = string.lower(current_path)
+        -- 如果请求路径与某个允许的路径匹配，正则匹配
+        if string.match(current_path, "^" .. lower_deny_path .. ".*$") then
+          is_deny_uri = true
+          is_deny_method = isMethodMatched(resource.methods,current_method)
+          break
         end
       end
       --ngx.log(ngx.ERR, "用户拒绝访问的路径为： ", cjson.encode(deny_paths))
 
-      -- 判断请求路径是否在 deny_paths 中
-      local is_deny = false
-      if deny_paths then
-        for _, deny_path in ipairs(deny_paths) do
-          local lower_deny_path = string.lower(deny_path)
-          lower_deny_path = lower_deny_path:gsub("-", "")
-          current_path = current_path:gsub("-", "")
-          current_path = string.lower(current_path)
-          -- 如果请求路径与某个允许的路径匹配，正则匹配
-          if string.match(current_path, "^" .. lower_deny_path .. ".*$") then
-            is_deny = true
-            break
-          end
-        end
-      end
 
       -- 如果请求路径匹配，执行拒绝策略 返回403
-      if is_deny then
+      if is_deny_uri and is_deny_method then
         ngx.log(ngx.ERR, "路径 " .. current_path .. " 命中拒绝策略，当前请求被拒绝")
         --return ngx.exit(ngx.HTTP_FORBIDDEN)
         return forbidden(conf.forbidden_url)
@@ -148,41 +172,34 @@ function plugin:access(conf)
   --ngx.log(ngx.ERR, ">>>>>>>>>>>>>>资源权限校验开关: ", conf.enable_resource_check)
   if conf.enable_resource_check then
     -- 解析接口返回的 JSON 数据（用户有权限访问的路径数组）
-    local allowed_paths = {}
     local success, json_data = pcall(cjson.decode, res.body)
 
     if not success then
-      ngx.log(ngx.ERR, "Error parsing JSON response: ", json_data)
+      ngx.log(ngx.ERR, "解析backend返回JSON失败 response: ", json_data)
       return ngx.exit(ngx.HTTP_INTERNAL_SERVER_ERROR)
     end
 
     if json_data.data.resourceList and #json_data.data.resourceList > 0 then
+      -- 判断请求路径是否在 allowed_paths 中
+      local is_allowed_uri = false
+      local is_allowed_method = false
       -- 提取 resourceList 中的 uri 并构建 allowed_paths 数组
       for _, resource in ipairs(json_data.data.resourceList) do
-        if isNotEmpty(resource.uri) then
-          table.insert(allowed_paths, resource.uri)
+        local lower_allowed_path = string.lower(resource.uri)
+        current_path = current_path:gsub("-", "")
+        current_path = string.lower(current_path)
+        --ngx.log(ngx.ERR, "当前允许路径： " .. lower_allowed_path .. "当前路径：" ..current_path)
+        -- 如果请求路径与某个允许的路径匹配，正则匹配
+        if string.match(current_path, "^" .. lower_allowed_path .. ".*$") then
+          is_allowed_uri = true
+          is_allowed_method = isMethodMatched(resource.methods,current_method)
+          break
         end
       end
       --ngx.log(ngx.ERR, "用户允许访问的路径为：", cjson.encode(allowed_paths))
 
-      -- 判断请求路径是否在 allowed_paths 中
-      local is_allowed = false
-      if allowed_paths then
-        for _, allowed_path in ipairs(allowed_paths) do
-          local lower_allowed_path = string.lower(allowed_path)
-          lower_allowed_path = lower_allowed_path:gsub("-", "")
-          current_path = current_path:gsub("-", "")
-          current_path = string.lower(current_path)
-          --ngx.log(ngx.ERR, "当前允许路径： " .. lower_allowed_path .. "当前路径：" ..current_path)
-          -- 如果请求路径与某个允许的路径匹配，正则匹配
-          if string.match(current_path, "^" .. lower_allowed_path .. ".*$") then
-            is_allowed = true
-            break
-          end
-        end
-      end
       -- 如果请求路径匹配，放行请求；否则返回 401
-      if is_allowed then
+      if is_allowed_uri and is_allowed_method then
         --ngx.log(ngx.ERR, "路径 " .. current_path .. " 存在，允许放行")
         return
       else

@@ -4,31 +4,39 @@ networks:
   default_network:
     driver: bridge
 
+include:
+  - ./${MQTT_PLUG}.yml
+
 services:
   frontend:
-    image: eco-registry.supos.com/sup9bnlh/supos-frontend-platform:1.0.5-T9
+    image: registry.supos.com/supos-ce/supos-frontend-platform:1.0.8-T5
     container_name: frontend
     ports:
       - "3010:3000"
       - "4000:4000"
       - "3001:3001"
+      - "3002:3002"
     environment:
       - OPENAI_API_KEY=${OPENAI_API_KEY}
       - OPENAI_API_MODEL=${OPENAI_API_MODEL}
       - REACT_APP_OS_LANG=${LANGUAGE}
+    volumes:
+      - plugin_front:/app/plugins-build
     networks:
       - default_network
+    restart: always
   backend:
-    image:  eco-registry.supos.com/sup9bnlh/backend:1.0.5-T9
+    image:  registry.supos.com/supos-ce/backend:1.0.8-T6
     container_name: backend
     environment:
-      - MEM_OPTS=-Xms512m -Xmx1536m
-      - JAVA_OPTS=-server -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/logs -Delk.enabled=false -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8000
+      - TZ=UTC
+      - MEM_OPTS=-Xms512m -Xmx2g -Duser.timezone=UTC
+      - JAVA_OPTS=-server -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/logs -Delk.enabled=false -Dpg.jdbcUrl=jdbc:postgresql://tsdb:5432/postgres -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8000
       - ENV_DB_HOST=postgresql
       - ENV_DB_PORT=5432
       - NODE_RED_HOST=nodered
       - NODE_RED_PORT=1880
-      - SYS_OS_MULTIPLE_TOPIC=${MULTIPLE_TOPIC}
+      - SYS_OS_MULTIPLE_TOPIC=false
       - SYS_OS_VERSION=${OS_VERSION}
       - SYS_OS_LANG=${LANGUAGE}
       - SYS_OS_AUTH_ENABLE=${OS_AUTH_ENABLE}
@@ -39,6 +47,12 @@ services:
       - SYS_OS_LOGIN_PATH=${OS_LOGIN_PATH}
       - SYS_OS_PLATFORM_TYPE=${OS_PLATFORM_TYPE}
       - SYS_OS_ENTRANCE_URL=${ENTRANCE_PROTOCOL}://${ENTRANCE_DOMAIN}:${ENTRANCE_PORT}
+      - SYS_OS_USE_ALIAS_PATH_AS_TOPIC=${USE_ALIAS_PATH_AS_TOPIC}
+      - SYS_OS_QUALITY_NAME=quality
+      - SYS_OS_TIMESTAMP_NAME=timeStamp
+      - SYS_OS_LAZY_TREE=${LAZY_TREE}
+      - MQTT_PLUGIN=${MQTT_PLUG}
+      - UNS_ADD_BATCH_SIZE=1000
       - OAUTH_REDIRECT_URI=${ENTRANCE_PROTOCOL}://${ENTRANCE_DOMAIN}:${ENTRANCE_PORT}/inter-api/supos/auth/token
       - OAUTH_SUPOS_HOME=${ENTRANCE_PROTOCOL}://${ENTRANCE_DOMAIN}:${ENTRANCE_PORT}/home
       - OAUTH_REALM=${OAUTH_REALM}
@@ -51,17 +65,19 @@ services:
       - ELASTICSEARCH_VERSION=${ELASTICSEARCH_VERSION}
       - ELASTICSEARCH_TIMEHORIZON=${ELASTICSEARCH_TIMEHORIZON}
     ports:
-      - "8080:8080"
-      - "7000:8000"
+      - "8091:8080"
+      - "19099:19099"
     deploy:
       resources:
         limits:
           memory: 3g
         reservations:
-          memory: 1g
+          memory: 2g
     volumes:
-      - /etc/localtime:/etc/localtime:ro
       - ${VOLUMES_PATH}/backend/apps:/data/apps
+      - ${VOLUMES_PATH}/backend/third-apps:/data/third-apps
+      - ${VOLUMES_PATH}/plugins/package:/data/plugins
+      - plugin_front:/data/plugins-frontend
       - ${VOLUMES_PATH}/backend/uns:/data/uns
       - ${VOLUMES_PATH}/backend/system:/data/system
       - ${VOLUMES_PATH}/backend/log:/logs
@@ -73,33 +89,9 @@ services:
       - chat2db
     networks:
       - default_network
-  emqx:
-    image: emqx/emqx:5.8
-    container_name: emqx
-    ports:
-      - "1883:1883"   # MQTT端口
-      - "8883:8883"   # MQTT加密端口
-      - "8083:8083"   # WebSocket端口
-      - "8084:8084"   # WebSocket加密端口
-      - "18083:18083" # EMQX Dashboard端口
-    environment:
-      - EMQX_NAME=emqx
-      - EMQX_NODE__COOKIE=secretcookie # 节点通信时的cookie
-      - service_logo=emqx-original.svg
-      - service_description=aboutus.emqxDescription
-      - service_redirect_url=/emqx/home/
-      - service_account=admin
-      - service_password=public
-    volumes:
-      - /etc/localtime:/etc/localtime:ro
-      - ${VOLUMES_PATH}/emqx/data:/opt/emqx/data
-      - ${VOLUMES_PATH}/emqx/log:/opt/emqx/log
-      - ${VOLUMES_PATH}/emqx/config/emqx.conf:/opt/emqx/etc/emqx.conf
-      - ${VOLUMES_PATH}/emqx/config/default_api_key.conf:/opt/emqx/etc/default_api_key.conf
-      - ${VOLUMES_PATH}/emqx/config/acl.conf:/opt/emqx/etc/acl.conf
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     restart: always
-    networks:
-      - default_network
   nodered:
     image: nodered/node-red:4.0.8-22
     container_name: nodered
@@ -110,14 +102,15 @@ services:
       - service_logo=nodered-original.svg
       - service_description=aboutus.nodeRedDescription
       - FLOWS=/data/flows.json
+      - USE_ALIAS_AS_TOPIC=${USE_ALIAS_PATH_AS_TOPIC}
+      - TIMESTAMP_NAME=timeStamp
+      - QUALITY_NAME=quality
       - TZ=UTC
       - OS_LANG=${LANGUAGE}
       - NODE_OPTIONS=--openssl-legacy-provider
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ${VOLUMES_PATH}/node-red:/data  # 使用当前目录的 data 目录
-    depends_on:
-      - emqx
     restart: always
     networks:
       - default_network
@@ -138,20 +131,6 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - ${VOLUMES_PATH}/eventflow:/data  # 使用当前目录的 data 目录
     restart: always
-    networks:
-      - default_network
-  mcpclient:
-    container_name: mcpclient
-    image: wenhao96/supos-mcpclient:latest
-    ports:
-      - "32893:3000"
-      - "32894:8123"
-    environment:
-      - OPENAI_API_KEY=${OPENAI_API_KEY}
-      - LANGSMITH_API_KEY=${LANGSMITH_API_KEY}
-      - AGENT_DEPLOYMENT_URL=${AGENT_DEPLOYMENT_URL}
-      - SUPOS_API_KEY=${SUPOS_API_KEY}
-      - SUPOS_API_URL=${SUPOS_API_URL}
     networks:
       - default_network
   grafana:
@@ -190,21 +169,42 @@ services:
     depends_on:
       postgresql:
         condition: service_healthy  # 依赖 PostgreSQL 的健康状态
+    restart: always
+    networks:
+      - default_network
+  portainer:
+    image: portainer/portainer-ce:2.23.0
+    container_name: portainer
+    environment:
+      service_logo: portainer.svg
+    command: --admin-password="$$2y$$05$$ZTAqF7Tn.hil8X.ifVmQTuKiJQoZDiKDW3t1lRR2/VPR06QoHv4AC"
+    ports:
+      - "8000:8000"
+      - "9443:9443"
+    restart: always
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ${VOLUMES_PATH}/portainer:/data
     networks:
       - default_network
   postgresql:
-    image: timescale/timescaledb:2.18.2-pg17
+    image: postgres:17
     container_name: postgresql
     environment:
+      TZ: UTC  # 设置容器时区
       service_logo: postgresql-original.svg
       service_description: aboutus.postgresqlDescription
       POSTGRES_PASSWORD: postgres
     ports:
       - "5432:5432"
     volumes:
-      - /etc/localtime:/etc/localtime:ro
+      - ${VOLUMES_PATH}/postgresql/conf/postgresql.conf:/etc/postgresql/custom.conf
       - ${VOLUMES_PATH}/postgresql/pgdata:/var/lib/postgresql/data # 持久化数据
       - ${VOLUMES_PATH}/postgresql/init-scripts:/docker-entrypoint-initdb.d  # 加载初始化脚本
+    command:
+      - postgres
+      - -c
+      - config_file=/etc/postgresql/custom.conf
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 10s
@@ -212,6 +212,7 @@ services:
       retries: 10
       start_period: 30s
       start_interval: 60s
+    restart: always
     networks:
       - default_network
   hasura:
@@ -280,6 +281,43 @@ services:
     restart: always
     networks:
       - default_network
+  tsdb:
+    image: timescale/timescaledb:2.20.0-pg17
+    container_name: tsdb
+    profiles:
+      - tsdb
+    environment:
+      TZ: UTC  # 设置容器时区
+      service_logo: postgresql-original.svg
+      service_description: aboutus.postgresqlDescription
+      POSTGRES_PASSWORD: postgres
+    shm_size: '1g'
+    ports:
+      - "2345:5432"
+    volumes:
+      - ${VOLUMES_PATH}/tsdb/conf/postgresql.conf:/etc/postgresql/custom.conf
+      - ${VOLUMES_PATH}/tsdb/data:/var/lib/postgresql/data # 持久化数据
+      - ${VOLUMES_PATH}/tsdb/init-scripts:/docker-entrypoint-initdb.d  # 加载初始化脚本
+    command:
+      - postgres
+      - -c
+      - config_file=/etc/postgresql/custom.conf
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+      start_interval: 60s
+    restart: always
+    deploy:
+     resources:
+       limits:
+         memory: 2G
+       reservations:
+         memory: 1G
+    networks:
+      - default_network
   tdengine:
     image: tdengine/tdengine:3.3.5.0
     profiles:
@@ -292,14 +330,15 @@ services:
       - "6043:6043"   # TDengine SQL 端口
       - "6060:6060"   # TDengine 后端页面
     volumes:
-      - /etc/localtime:/etc/localtime:ro
       - ${VOLUMES_PATH}/tdengine/data:/var/lib/taos # 持久化数据
       - ${VOLUMES_PATH}/tdengine/log:/var/log/taos   # 持久化日志
     environment:
+      - TZ=UTC
       - service_logo=tdengine-original.svg
       - service_description=aboutus.tdengineDescription
       - TDENGINE_ROOT_PASSWORD=taosdata # 设置 root 用户密码
       - TD_ENGINE_ROOT_USER=root
+    restart: always
     networks:
       - default_network
   kong:
@@ -387,17 +426,17 @@ services:
     depends_on:
       keycloak:
         condition: service_healthy
+    restart: always
     networks:
       - default_network
   fuxa:
     container_name: fuxa
-    image: eco-registry.supos.com/sup9bnlh/fuxa:1.0.5-T13
+    image: eco-registry.supos.com/sup9bnlh/fuxa:1.0.8-T1
     profiles:
       - fuxa
     environment:
       - LANG=${FUXA_LANG:-en}
       - service_logo=fuxa.svg
-    restart: unless-stopped
     volumes:
       - ${VOLUMES_PATH}/fuxa/appdata:/usr/src/app/FUXA/server/_appdata
       - ${VOLUMES_PATH}/fuxa/db:/usr/src/app/FUXA/server/_db
@@ -405,6 +444,7 @@ services:
       - ${VOLUMES_PATH}/fuxa/images:/usr/src/app/FUXA/server/_images
     ports:
       - '1881:1881'
+    restart: always
     networks:
       - default_network
   chat2db:
@@ -418,5 +458,8 @@ services:
     environment:
       - service_logo=chat2db.svg
       - OPENAI_API_KEY=${OPENAI_API_KEY}
+    restart: always
     networks:
       - default_network
+volumes:
+  plugin_front:
