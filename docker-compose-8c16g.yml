@@ -26,7 +26,7 @@ services:
       - default_network
     restart: always
   backend:
-    image:  registry.supos.com/supos-ce/backend:1.0.8-T6
+    image:  registry.supos.com/supos-ce/backend:1.0.8-T7
     container_name: backend
     environment:
       - TZ=UTC
