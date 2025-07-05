@@ -2058,6 +2058,7 @@ plugins:
     whitelist_paths:
     - ^/inter-api/supos/auth.*$
     - ^/inter-api/supos/systemConfig.*$
+    - ^/inter-api/supos/theme/getConfig.*$
     - ^/$
     - ^/assets.*$
     - ^/locale.*$
@@ -2069,7 +2070,8 @@ plugins:
     - ^/keycloak.*$
     - ^/nodered.*$
     - ^/files.*$
-    - ^/test/.*$
+    - ^/freeLogin.*$
+    - ^/inter-api/supos/dev/logs.*$
   name: supos-auth-checker
 - consumer: ~
   created_at: 1734330234

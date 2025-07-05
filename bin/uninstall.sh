@@ -15,7 +15,7 @@ if [ "$OS_RESOURCE_SPEC" == "1" ]; then
 fi
 
 # 卸载所有服务
-command="--profile fuxa --profile grafana --profile minio --profile tdengine --profile elk " 
+command="--profile fuxa --profile grafana --profile minio --profile tdengine --profile elk --profile tsdb" 
 
 if [ -f $SCRIPT_DIR/../.env.tmp ]; then 
   docker compose --env-file $SCRIPT_DIR/../.env --env-file $SCRIPT_DIR/../.env.tmp --project-name supos $command -f $DOCKER_COMPOSE_FILE down && rm -f $VOLUMES_PATH/backend/system/active-services.txt

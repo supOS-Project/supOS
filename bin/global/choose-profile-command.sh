@@ -5,34 +5,63 @@ profileCommand=""
 OUTPUT_FILE=$SCRIPT_DIR/global/active-services.txt
 # ENV_TMP=$SCRIPT_DIR/../.env.tmp
 
+loopConfirmA() {
+    while true; do
+        read -p "$1" choice
+        choice=$(echo "$choice" | tr -d ' ' | tr '[:upper:]' '[:lower:]')
+        case $choice in
+            'y'|'Y'|'n'|'N'|'')
+                echo "$choice"
+                break
+                ;;
+            *)
+                ;;
+        esac
+    done
+}
+
+loopConfirmB() {
+    while true; do
+        read -p "$1" choice
+        choice=$(echo "$choice" | tr -d ' ' | tr '[:upper:]' '[:lower:]')
+        case $choice in
+            1|2|'')
+                echo "$choice"
+                break
+                ;;
+            *)
+                ;;
+        esac
+    done
+}
+
+
 chooseProfile1() {
 
     echo -e "\n"
     if [[ "$LANGUAGE" == "zh-CN" ]]; then
-        read -p "您是否需要自定义安装哪些服务? [1] 不，使用默认配置即可(default) [2] 是的，我要选择 : " askyou
+        askyou=$(loopConfirmB "您是否需要自定义安装哪些服务? [1] 不，使用默认配置即可(default) [2] 是的，我要选择 : ")
     else 
-        read -p "Do you need to customize which services to install? [1] No, use defaults(default) [2] Yes : " askyou
+        askyou=$(loopConfirmB "Do you need to customize which services to install? [1] No, use defaults(default) [2] Yes : ")
     fi
     askyou=${askyou:-1}
     if [[ $askyou == 1 ]]; then
         profileCommand="--profile fuxa --profile grafana --profile tsdb --profile emqx "
         activeServices+=",fuxa,grafana,tsdb,emqx"
     else 
-        read -p "Step 1: fuxa? [y/n]: " choicefuxa
+        choicefuxa=$(loopConfirmA "Step 1: fuxa? [y/n]: ")
         choicefuxa=${choicefuxa:-Y}
         if [[ $choicefuxa =~ ^[Yy] ]]; then
             profileCommand="--profile fuxa "
             activeServices+=",fuxa"
         fi
-
-        read -p "Step 2: grafana? [y/n]: " choicegrafana
+        choicegrafana=$(loopConfirmA "Step 2: grafana? [y/n]: ")
         choicegrafana=${choicegrafana:-Y}
         if [[ $choicegrafana =~ ^[Yy] ]]; then
             profileCommand+="--profile grafana "
             activeServices+=",grafana"
         fi
-
-        read -p "Step 3: minio? [y/n]: " choiceminio
+        choiceminio=$(loopConfirmA "Step 3: minio? [y/n]: ")
         choiceminio=${choiceminio:-Y}
         if [[ $choiceminio =~ ^[Yy] ]]; then
             profileCommand+="--profile minio "
@@ -40,9 +69,9 @@ chooseProfile1() {
         fi
 
         if [[ "$LANGUAGE" == "zh-CN" ]]; then
-            read -p "Step 4: 请选择MQTT插件: [1] emqx(default)  [2] gmqtt : " choicemqtt
+            choicemqtt=$(loopConfirmB "Step 4: 请选择MQTT插件: [1] emqx(default)  [2] gmqtt : ")
         else 
-            read -p "Step 4: Please choose MQTT plugin: [1] emqx(default)  [2] gmqtt : " choicemqtt
+            choicemqtt=$(loopConfirmB "Step 4: Please choose MQTT plugin: [1] emqx(default)  [2] gmqtt : ")
         fi
         choicemqtt=${choicemqtt:-1}
         if [[ $choicemqtt == 1 ]]; then
@@ -54,9 +83,9 @@ chooseProfile1() {
         fi
 
         if [[ "$LANGUAGE" == "zh-CN" ]]; then
-            read -p "Step 5: 请选择一种时序数据库: [1] TimescaleDB(default)  [2] TDEngine : " choicedb
+            choicedb=$(loopConfirmB "Step 5: 请选择一种时序数据库: [1] TimescaleDB(default)  [2] TDEngine : ")
         else 
-            read -p "Step 5: Please select a time-series database: [1] TimescaleDB(default)  [2] TDEngine : " choicedb
+            choicedb=$(loopConfirmB "Step 5: Please select a time-series database: [1] TimescaleDB(default)  [2] TDEngine : ")
         fi
         choicedb=${choicedb:-1}
         if [[ $choicedb == 1 ]]; then
@@ -80,51 +109,52 @@ chooseProfile2() {
 
     echo -e "\n"
     if [[ "$LANGUAGE" == "zh-CN" ]]; then
-        read -p "您是否需要自定义安装哪些服务? [1] 不，使用默认配置即可(default) [2] 是的，我要选择 : " askyou
+        askyou=$(loopConfirmB "您是否需要自定义安装哪些服务? [1] 不，使用默认配置即可(default) [2] 是的，我要选择 : ")
     else 
-        read -p "Do you need to customize which services to install? [1] No, use defaults(default) [2] Yes : " askyou
+        askyou=$(loopConfirmB "Do you need to customize which services to install? [1] No, use defaults(default) [2] Yes : ")
     fi
     askyou=${askyou:-1}
     if [[ $askyou == 1 ]]; then
         profileCommand="--profile fuxa --profile grafana --profile tsdb --profile emqx "
         activeServices+=",fuxa,grafana,tsdb,emqx"
     else 
-        read -p "Step 1: fuxa? [y/n]: " choicefuxa
+        choicefuxa=$(loopConfirmA "Step 1: fuxa? [y/n]: ")
         choicefuxa=${choicefuxa:-Y}
         if [[ $choicefuxa =~ ^[Yy] ]]; then
             profileCommand="--profile fuxa "
             activeServices+=",fuxa"
         fi
 
-        read -p "Step 2: grafana? [y/n]: " choicegrafana
+        choicegrafana=$(loopConfirmA "Step 2: grafana? [y/n]: ")
         choicegrafana=${choicegrafana:-Y}
         if [[ $choicegrafana =~ ^[Yy] ]]; then
             profileCommand+="--profile grafana "
             activeServices+=",grafana"
         fi
 
-        read -p "Step 3: minio? [y/n]: " choiceminio
+        choiceminio=$(loopConfirmA "Step 3: minio? [y/n]: ")
         choiceminio=${choiceminio:-Y}
         if [[ $choiceminio =~ ^[Yy] ]]; then
             profileCommand+="--profile minio "
             activeServices+=",minio"
         fi
-        read -p "Step 4: elasticsearch, kibana, filebeat? [y/n]: " choiceelk
+
+        choiceelk=$(loopConfirmA "Step 4: elasticsearch, kibana, filebeat? [y/n]: ")
         choiceelk=${choiceelk:-Y}
         if [[ $choiceelk =~ ^[Yy] ]]; then
             profileCommand+="--profile elk "
         fi
 
-        read -p "Step 5: mcpClient? [y/n]: " choicemcp
+        choicemcp=$(loopConfirmA "Step 5: mcpClient? [y/n]: ")
         choicemcp=${choicemcp:-Y}
         if [[ $choicemcp =~ ^[Yy] ]]; then
             profileCommand+="--profile mcpclient "
         fi
 
         if [[ "$LANGUAGE" == "zh-CN" ]]; then
-            read -p "Step 6: 请选择MQTT插件: [1] emqx(default)  [2] gmqtt : " choicemqtt
+            choicemqtt=$(loopConfirmB "Step 6: 请选择MQTT插件: [1] emqx(default)  [2] gmqtt : ")
         else 
-            read -p "Step 6: Please choose MQTT plugin: [1] emqx(default)  [2] gmqtt : " choicemqtt
+            choicemqtt=$(loopConfirmB "Step 6: Please choose MQTT plugin: [1] emqx(default)  [2] gmqtt : ")
         fi
         choicemqtt=${choicemqtt:-1}
         if [[ $choicemqtt == 1 ]]; then
@@ -136,9 +166,9 @@ chooseProfile2() {
         fi
 
         if [[ "$LANGUAGE" == "zh-CN" ]]; then
-            read -p "Step 7: 请选择一种时序数据库: [1] TimescaleDB(default)  [2] TDEngine : " choicedb
+            choicedb=$(loopConfirmB "Step 7: 请选择一种时序数据库: [1] TimescaleDB(default)  [2] TDEngine : ")
         else 
-            read -p "Step 7: Please select a time-series database: [1] TimescaleDB(default)  [2] TDEngine : " choicedb
+            choicedb=$(loopConfirmB "Step 7: Please select a time-series database: [1] TimescaleDB(default)  [2] TDEngine : ")
         fi
         choicedb=${choicedb:-1}
         if [[ $choicedb == 1 ]]; then

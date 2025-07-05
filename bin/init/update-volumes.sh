@@ -2,8 +2,6 @@
 
 set -e
 
-source $SCRIPT_DIR/global/log.sh
-
 # load npm cache
 rm -rf $SCRIPT_DIR/../mount/node-red/.npm/
 tar -zxvf $SCRIPT_DIR/../mount/node-red/npmCache.tar.gz -C $SCRIPT_DIR/../mount/node-red/ > /dev/null 2>&1

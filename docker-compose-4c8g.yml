@@ -5,11 +5,11 @@ networks:
     driver: bridge
 
 include:
-  - ./${MQTT_PLUG}.yml
+  - ./${MQTT_PLUG:-emqx}.yml
 
 services:
   frontend:
-    image: registry.supos.com/supos-ce/supos-frontend-platform:1.0.8-T5
+    image: eco-registry.supos.com/sup9bnlh/supos-frontend-platform:1.0.9-T10
     container_name: frontend
     ports:
       - "3010:3000"
@@ -26,11 +26,11 @@ services:
       - default_network
     restart: always
   backend:
-    image:  registry.supos.com/supos-ce/backend:1.0.8-T7
+    image:  eco-registry.supos.com/sup9bnlh/backend:1.0.9-T11
     container_name: backend
     environment:
       - TZ=UTC
-      - MEM_OPTS=-Xms512m -Xmx2g -Duser.timezone=UTC
+      - MEM_OPTS=-Xms512m -Xmx2g -Duser.timezone=UTC -Dfile.encoding=utf-8 -Dfile.encoding=utf-8
       - JAVA_OPTS=-server -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/logs -Delk.enabled=false -Dpg.jdbcUrl=jdbc:postgresql://tsdb:5432/postgres -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8000
       - ENV_DB_HOST=postgresql
       - ENV_DB_PORT=5432
@@ -51,7 +51,7 @@ services:
       - SYS_OS_QUALITY_NAME=quality
       - SYS_OS_TIMESTAMP_NAME=timeStamp
       - SYS_OS_LAZY_TREE=${LAZY_TREE}
-      - MQTT_PLUGIN=${MQTT_PLUG}
+      - MQTT_PLUGIN=${MQTT_PLUG:-emqx}
       - UNS_ADD_BATCH_SIZE=1000
       - OAUTH_REDIRECT_URI=${ENTRANCE_PROTOCOL}://${ENTRANCE_DOMAIN}:${ENTRANCE_PORT}/inter-api/supos/auth/token
       - OAUTH_SUPOS_HOME=${ENTRANCE_PROTOCOL}://${ENTRANCE_DOMAIN}:${ENTRANCE_PORT}/home
@@ -64,6 +64,8 @@ services:
       - OAUTH_REFRESH_TOKEN_TIME=${OAUTH_REFRESH_TOKEN_TIME}
       - ELASTICSEARCH_VERSION=${ELASTICSEARCH_VERSION}
       - ELASTICSEARCH_TIMEHORIZON=${ELASTICSEARCH_TIMEHORIZON}
+      - SYS_OS_LDAP_ENABLE=${LDAP_ENABLE}
+      - SYS_OS_LDAP_URL=${LDAP_URL}
     ports:
       - "8091:8080"
       - "19099:19099"
@@ -188,13 +190,14 @@ services:
     networks:
       - default_network
   postgresql:
-    image: postgres:17
+    image: timescale/timescaledb:2.20.0-pg17
     container_name: postgresql
     environment:
       TZ: UTC  # 设置容器时区
       service_logo: postgresql-original.svg
       service_description: aboutus.postgresqlDescription
       POSTGRES_PASSWORD: postgres
+    shm_size: '1g'
     ports:
       - "5432:5432"
     volumes:
@@ -209,9 +212,9 @@ services:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 10s
       timeout: 5s
-      retries: 10
-      start_period: 30s
-      start_interval: 60s
+      retries: 60
+      start_period: 300s
+      start_interval: 600s
     restart: always
     networks:
       - default_network
@@ -240,6 +243,7 @@ services:
     container_name: keycloak
     ports:
       - "8081:8080"
+    user: root
     deploy:
       resources:
         limits:
@@ -251,7 +255,7 @@ services:
       service_description: aboutus.keycloakDescription
       service_redirect_url: /keycloak/home/
       service_account: admin
-      service_password: admin
+      service_password: Supos1304@
       KC_SSL_REQUIRED: none  # 不要求 SSL
       KC_PROXY: passthrough                       # 设置代理模式
       KC_HOSTNAME: "${ENTRANCE_DOMAIN}"              # 指定主机名
@@ -263,14 +267,29 @@ services:
       KC_DB_URL: "jdbc:postgresql://postgresql:5432/keycloak"
       KC_DB_USERNAME: postgres
       KC_DB_PASSWORD: postgres
+      KC_DB_POOL_INITIAL_SIZE: 2
+      KC_DB_POOL_MIN_SIZE: 2
+      KC_DB_POOL_MAX_SIZE: 4
+      KC_DB_POOL_MAX_LIFETIME: 1800
       KC_HEALTH_ENABLED: true
+      KC_FEATURES: token-exchange
+      JAVA_OPTS_APPEND: -Dcom.sun.jndi.ldap.object.disableEndpointIdentification=true
     volumes:
       - ${VOLUMES_PATH}/keycloak/data:/opt/keycloak/data  # 将 Keycloak 的数据目录挂载到本地
       - ${VOLUMES_PATH}/keycloak/theme/keycloak.v2:/opt/keycloak/themes/wenhao
+      - ${VOLUMES_PATH}/keycloak/ca/ca.crt:/opt/keycloak/ca.crt
+      - ${VOLUMES_PATH}/keycloak/ca/init-ldaps-cert.sh:/opt/keycloak/init-ldaps-cert.sh
     depends_on:
       postgresql:
         condition: service_healthy  # 依赖 PostgreSQL 的健康状态
-    command: start-dev --hostname ${ENTRANCE_PROTOCOL}://${ENTRANCE_DOMAIN}:${ENTRANCE_PORT}/keycloak/home/auth  --proxy-headers forwarded
+    entrypoint:
+      - /bin/bash
+      - -c
+      - |
+        chmod +x /opt/keycloak/init-ldaps-cert.sh && \
+        bash /opt/keycloak/init-ldaps-cert.sh && \
+        exec /opt/keycloak/bin/kc.sh start-dev --hostname ${ENTRANCE_PROTOCOL}://${ENTRANCE_DOMAIN}:${ENTRANCE_PORT}/keycloak/home/auth --proxy-headers forwarded
+#    command: start-dev --hostname ${ENTRANCE_PROTOCOL}://${ENTRANCE_DOMAIN}:${ENTRANCE_PORT}/keycloak/home/auth  --proxy-headers forwarded
     healthcheck:
       test: >
         /bin/bash -c "
@@ -345,6 +364,11 @@ services:
     image: kong:3.9.0
     container_name: kong
     environment:
+      KONG_WORKER_STATE_UPDATE_FREQUENCY: 10
+      KONG_DB_CACHE_TTL: 600
+      KONG_NGINX_WORKER_PROCESSES: 4
+      KONG_LUA_GC_PAUSE: 100            # 提高暂停率，降低 GC 触发频率
+      KONG_LUA_GC_STEPMUL: 200          # 增加单次回收强度
       service_logo: konga-original.svg
       service_description: aboutus.kongaDescription
       service_redirect_url: /konga/home/

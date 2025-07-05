@@ -1,0 +1,5 @@
+{
+  "log-driver": "json-file",
+  "log-level": "warn",
+  "log-opts": {"max-size": "1024m", "max-file": "3"}
+}
