@@ -46,8 +46,8 @@ chooseProfile1() {
     fi
     askyou=${askyou:-1}
     if [[ $askyou == 1 ]]; then
-        profileCommand="--profile fuxa --profile grafana --profile tsdb --profile emqx "
-        activeServices+=",fuxa,grafana,tsdb,emqx"
+        profileCommand="--profile fuxa --profile grafana --profile tsdb --profile emqx --profile eventflow "
+        activeServices+=",fuxa,grafana,tsdb,emqx,eventflow"
     else 
         choicefuxa=$(loopConfirmA "Step 1: fuxa? [y/n]: ")
         choicefuxa=${choicefuxa:-Y}
@@ -61,7 +61,13 @@ chooseProfile1() {
             profileCommand+="--profile grafana "
             activeServices+=",grafana"
         fi
-        choiceminio=$(loopConfirmA "Step 3: minio? [y/n]: ")
+        choiceeventflow=$(loopConfirmA "Step 3: eventflow? [y/n]: ")
+        choiceeventflow=${choiceeventflow:-Y}
+        if [[ $choiceeventflow =~ ^[Yy] ]]; then
+            profileCommand+="--profile eventflow "
+            activeServices+=",eventflow"
+        fi
+        choiceminio=$(loopConfirmA "Step 4: minio? [y/n]: ")
         choiceminio=${choiceminio:-Y}
         if [[ $choiceminio =~ ^[Yy] ]]; then
             profileCommand+="--profile minio "
@@ -69,9 +75,9 @@ chooseProfile1() {
         fi
 
         if [[ "$LANGUAGE" == "zh-CN" ]]; then
-            choicemqtt=$(loopConfirmB "Step 4: 请选择MQTT插件: [1] emqx(default)  [2] gmqtt : ")
+            choicemqtt=$(loopConfirmB "Step 5: 请选择MQTT插件: [1] emqx(default)  [2] gmqtt : ")
         else 
-            choicemqtt=$(loopConfirmB "Step 4: Please choose MQTT plugin: [1] emqx(default)  [2] gmqtt : ")
+            choicemqtt=$(loopConfirmB "Step 5: Please choose MQTT plugin: [1] emqx(default)  [2] gmqtt : ")
         fi
         choicemqtt=${choicemqtt:-1}
         if [[ $choicemqtt == 1 ]]; then
@@ -83,9 +89,9 @@ chooseProfile1() {
         fi
 
         if [[ "$LANGUAGE" == "zh-CN" ]]; then
-            choicedb=$(loopConfirmB "Step 5: 请选择一种时序数据库: [1] TimescaleDB(default)  [2] TDEngine : ")
+            choicedb=$(loopConfirmB "Step 6: 请选择一种时序数据库: [1] TimescaleDB(default)  [2] TDEngine : ")
         else 
-            choicedb=$(loopConfirmB "Step 5: Please select a time-series database: [1] TimescaleDB(default)  [2] TDEngine : ")
+            choicedb=$(loopConfirmB "Step 6: Please select a time-series database: [1] TimescaleDB(default)  [2] TDEngine : ")
         fi
         choicedb=${choicedb:-1}
         if [[ $choicedb == 1 ]]; then
@@ -115,8 +121,8 @@ chooseProfile2() {
     fi
     askyou=${askyou:-1}
     if [[ $askyou == 1 ]]; then
-        profileCommand="--profile fuxa --profile grafana --profile tsdb --profile emqx "
-        activeServices+=",fuxa,grafana,tsdb,emqx"
+        profileCommand="--profile fuxa --profile grafana --profile tsdb --profile emqx --profile eventflow "
+        activeServices+=",fuxa,grafana,tsdb,emqx,eventflow"
     else 
         choicefuxa=$(loopConfirmA "Step 1: fuxa? [y/n]: ")
         choicefuxa=${choicefuxa:-Y}
@@ -132,29 +138,36 @@ chooseProfile2() {
             activeServices+=",grafana"
         fi
 
-        choiceminio=$(loopConfirmA "Step 3: minio? [y/n]: ")
+        choiceeventflow=$(loopConfirmA "Step 3: eventflow? [y/n]: ")
+        choiceeventflow=${choiceeventflow:-Y}
+        if [[ $choiceeventflow =~ ^[Yy] ]]; then
+            profileCommand+="--profile eventflow "
+            activeServices+=",eventflow"
+        fi
+
+        choiceminio=$(loopConfirmA "Step 4: minio? [y/n]: ")
         choiceminio=${choiceminio:-Y}
         if [[ $choiceminio =~ ^[Yy] ]]; then
             profileCommand+="--profile minio "
             activeServices+=",minio"
         fi
 
-        choiceelk=$(loopConfirmA "Step 4: elasticsearch, kibana, filebeat? [y/n]: ")
+        choiceelk=$(loopConfirmA "Step 5: elasticsearch, kibana, filebeat? [y/n]: ")
         choiceelk=${choiceelk:-Y}
         if [[ $choiceelk =~ ^[Yy] ]]; then
             profileCommand+="--profile elk "
         fi
 
-        choicemcp=$(loopConfirmA "Step 5: mcpClient? [y/n]: ")
+        choicemcp=$(loopConfirmA "Step 6: mcpClient? [y/n]: ")
         choicemcp=${choicemcp:-Y}
         if [[ $choicemcp =~ ^[Yy] ]]; then
             profileCommand+="--profile mcpclient "
         fi
 
         if [[ "$LANGUAGE" == "zh-CN" ]]; then
-            choicemqtt=$(loopConfirmB "Step 6: 请选择MQTT插件: [1] emqx(default)  [2] gmqtt : ")
+            choicemqtt=$(loopConfirmB "Step 7: 请选择MQTT插件: [1] emqx(default)  [2] gmqtt : ")
         else 
-            choicemqtt=$(loopConfirmB "Step 6: Please choose MQTT plugin: [1] emqx(default)  [2] gmqtt : ")
+            choicemqtt=$(loopConfirmB "Step 7: Please choose MQTT plugin: [1] emqx(default)  [2] gmqtt : ")
         fi
         choicemqtt=${choicemqtt:-1}
         if [[ $choicemqtt == 1 ]]; then
@@ -166,9 +179,9 @@ chooseProfile2() {
         fi
 
         if [[ "$LANGUAGE" == "zh-CN" ]]; then
-            choicedb=$(loopConfirmB "Step 7: 请选择一种时序数据库: [1] TimescaleDB(default)  [2] TDEngine : ")
+            choicedb=$(loopConfirmB "Step 8: 请选择一种时序数据库: [1] TimescaleDB(default)  [2] TDEngine : ")
         else 
-            choicedb=$(loopConfirmB "Step 7: Please select a time-series database: [1] TimescaleDB(default)  [2] TDEngine : ")
+            choicedb=$(loopConfirmB "Step 8: Please select a time-series database: [1] TimescaleDB(default)  [2] TDEngine : ")
         fi
         choicedb=${choicedb:-1}
         if [[ $choicedb == 1 ]]; then

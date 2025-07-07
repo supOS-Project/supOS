@@ -31,6 +31,12 @@ else
    echo "ENABLE_MCP=none" >> $SCRIPT_DIR/../.env.tmp
 fi
 
+if echo "$1" | grep -q "eventflow"; then
+   echo "ENABLE_EVENTFLOW=menu" >> $SCRIPT_DIR/../.env.tmp
+else 
+   echo "ENABLE_EVENTFLOW=none" >> $SCRIPT_DIR/../.env.tmp
+fi
+
 REDIRECT_BASE_URL=$ENTRANCE_PROTOCOL://$ENTRANCE_DOMAIN:$ENTRANCE_PORT
 if [ $ENTRANCE_PORT == '80' ] || [ $ENTRANCE_PORT == '443' ]; then
   REDIRECT_BASE_URL=$ENTRANCE_PROTOCOL://$ENTRANCE_DOMAIN
