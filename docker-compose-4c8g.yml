@@ -215,8 +215,8 @@ services:
       interval: 10s
       timeout: 5s
       retries: 60
-      start_period: 300s
-      start_interval: 600s
+      start_period: 60s
+      start_interval: 60s
     restart: always
     networks:
       - default_network
@@ -327,7 +327,7 @@ services:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 10s
       timeout: 5s
-      retries: 10
+      retries: 60
       start_period: 30s
       start_interval: 60s
     restart: always
