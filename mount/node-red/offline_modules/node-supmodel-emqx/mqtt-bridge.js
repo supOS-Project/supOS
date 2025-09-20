@@ -18,7 +18,7 @@ class MqttBridge {
         this.timer = setInterval(() => {
             let newMsg = this.queue.poll();
             if (newMsg != null) {
-                node.send([newMsg, null])
+                node.send([newMsg])
             }
         }, interval); 
 

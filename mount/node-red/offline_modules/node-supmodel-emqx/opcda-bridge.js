@@ -16,7 +16,7 @@ class OpcdaBridge {
         this.timer = setInterval(() => {
             let newMsg = this.queue.poll();
             if (newMsg != null) {
-                node.send([newMsg, null])
+                node.send([newMsg])
             }
         }, interval); // 5毫秒轮询队列里的数据，每次只取一个topic发送
         

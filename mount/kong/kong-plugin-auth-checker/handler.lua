@@ -32,7 +32,7 @@ local function unauthorized(redirect_url)
     --ngx.log(ngx.ERR, "重定向到: ", redirect_url)
     -- 设置响应头以清空浏览器的 Cookie
     ngx.header["Set-Cookie"] = {
-      "supos_community_token=; Path=/; Max-Age=0; HttpOnly"
+      "supos_community_token=; Path=/; Max-Age=0;"
     }
     return ngx.redirect(redirect_url, ngx.HTTP_MOVED_TEMPORARILY)
   end

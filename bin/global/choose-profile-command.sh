@@ -1,6 +1,6 @@
 #!/bin/bash
 
-activeServices="nodered,keycloak,kong,postgresql,hasura,chat2db,portainer"
+activeServices="nodered,keycloak,kong,postgresql,tsdb,chat2db,portainer"
 profileCommand=""
 OUTPUT_FILE=$SCRIPT_DIR/global/active-services.txt
 # ENV_TMP=$SCRIPT_DIR/../.env.tmp
@@ -88,22 +88,6 @@ chooseProfile1() {
             activeServices+=",gmqtt"
         fi
 
-        if [[ "$LANGUAGE" == "zh-CN" ]]; then
-            choicedb=$(loopConfirmB "Step 6: 请选择一种时序数据库: [1] TimescaleDB(default)  [2] TDEngine : ")
-        else 
-            choicedb=$(loopConfirmB "Step 6: Please select a time-series database: [1] TimescaleDB(default)  [2] TDEngine : ")
-        fi
-        choicedb=${choicedb:-1}
-        if [[ $choicedb == 1 ]]; then
-            profileCommand+="--profile tsdb "
-            activeServices+=",tsdb"
-            # echo "PG_IMAGE=postgres:17" >> $ENV_TMP
-        else 
-            profileCommand+="--profile tdengine "
-            activeServices+=",tdengine"
-            # echo "PG_IMAGE=timescale/timescaledb:2.18.2-pg17" >> $ENV_TMP
-        fi
-
     fi 
     echo $activeServices > $OUTPUT_FILE
     echo $profileCommand >> $OUTPUT_FILE
@@ -158,16 +142,10 @@ chooseProfile2() {
             profileCommand+="--profile elk "
         fi
 
-        choicemcp=$(loopConfirmA "Step 6: mcpClient? [y/n]: ")
-        choicemcp=${choicemcp:-Y}
-        if [[ $choicemcp =~ ^[Yy] ]]; then
-            profileCommand+="--profile mcpclient "
-        fi
-
         if [[ "$LANGUAGE" == "zh-CN" ]]; then
-            choicemqtt=$(loopConfirmB "Step 7: 请选择MQTT插件: [1] emqx(default)  [2] gmqtt : ")
+            choicemqtt=$(loopConfirmB "Step 6: 请选择MQTT插件: [1] emqx(default)  [2] gmqtt : ")
         else 
-            choicemqtt=$(loopConfirmB "Step 7: Please choose MQTT plugin: [1] emqx(default)  [2] gmqtt : ")
+            choicemqtt=$(loopConfirmB "Step 6: Please choose MQTT plugin: [1] emqx(default)  [2] gmqtt : ")
         fi
         choicemqtt=${choicemqtt:-1}
         if [[ $choicemqtt == 1 ]]; then
@@ -176,22 +154,6 @@ chooseProfile2() {
         else 
             profileCommand+="--profile gmqtt "
             activeServices+=",gmqtt"
-        fi
-
-        if [[ "$LANGUAGE" == "zh-CN" ]]; then
-            choicedb=$(loopConfirmB "Step 8: 请选择一种时序数据库: [1] TimescaleDB(default)  [2] TDEngine : ")
-        else 
-            choicedb=$(loopConfirmB "Step 8: Please select a time-series database: [1] TimescaleDB(default)  [2] TDEngine : ")
-        fi
-        choicedb=${choicedb:-1}
-        if [[ $choicedb == 1 ]]; then
-            profileCommand+="--profile tsdb "
-            activeServices+=",tsdb"
-            # echo "PG_IMAGE=postgres:17" >> $ENV_TMP
-        else 
-            profileCommand+="--profile tdengine "
-            activeServices+=",tdengine"
-            # echo "PG_IMAGE=timescale/timescaledb:2.18.2-pg17" >> $ENV_TMP
         fi
 
     fi 

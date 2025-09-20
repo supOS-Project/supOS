@@ -21,7 +21,7 @@ class OpcdaBridge {
                     "topic": plantTopic,
                     "payload": payloads
                 }
-                node.send([newMsg, null])
+                node.send([newMsg])
             }
         }, interval); // 100毫秒推送一次
 

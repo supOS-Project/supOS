@@ -22,7 +22,7 @@ class MqttBridge {
                     "topic": plantTopic,
                     "payload": payloads
                 }
-                node.send([newMsg, null])
+                node.send([newMsg])
             }
         }, interval); 
 

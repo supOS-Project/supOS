@@ -1,6 +1,6 @@
 services:
   emqx:
-    image: eco-registry.supos.com/sup9bnlh/gmqtt:v0.9
+    image: eco-registry.supos.com/sup9bnlh/gmqtt:${gmqtt_imageTag}
     container_name: emqx
     ports:
       - "1883:1883"   # MQTT端口

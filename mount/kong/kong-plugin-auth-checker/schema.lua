@@ -22,6 +22,9 @@ return {
                   "^/files.*$",
                   "^/supos-login.*$",
                   "^/nodered.*$",
+                  "^/inter-api/supos/cascade.*$",
+                  "^/inter-api/supos/license.*$",
+                  "^/swagger-ui.*$",
                   "/403"
               },
           },

@@ -32,6 +32,8 @@
       window.parent.postMessage({ type: 'currentEventFlows', data: { flows: completeNodeSet, type: event.data.data } }, '*');
     } else if (event.data.type === 'openEventMenu') {
       event.data.data.id && document.querySelector(`#${event.data.data.id}`).click()
+    } else if (event.data.type === 'updateVersion') {
+      RED.nodes.version(event.data.data)
     }
   };
   // 通知父节点是否变化

@@ -29,7 +29,7 @@
     <h3><strong>Tags Mapping</strong></h3>
     <p>This is the most critical configuration area of the node. Here, you will define how each data point is mapped from the source protocol to a target UNS Topic. Click [+ New Row] to add a new mapping rule.</p>
     <dl class="message-properties">
-        <dt>FilePath <span class="property-type">(Required)</span></dt>
+        <dt>Path <span class="property-type">(Required)</span></dt>
         <dd>  - This is the final location of the data in your platform's UNS, which is also its MQTT Topic.</dd>
         <dd>  - Naming Convention: The platform treats topics as a "folder/file" structure, where only the last level can transmit data. For example, a valid path would be Workshop1/Line2/CNC01/SpindleTemperature.</dd>
         <br>
@@ -61,7 +61,7 @@
     <h2><strong>Output</strong></h2>
     <p>This node will output one or more msg objects, where each object's msg.topic and msg.payload have been formatted:</p>
     <ul>
-        <li>msg.topic: The UNS path you defined in FilePath.</li>
+        <li>msg.topic: The UNS path you defined in Path.</li>
         <li>msg.payload: A JSON object containing the "AttributeName" and "AttributeValue" you defined.</li>
     </ul>
     <p>Example Output:</p>
@@ -77,7 +77,7 @@
     <p>4. Double-click the UNS Mapper node and select OPC UA as the protocol in the "Basic Info" tab.</p>
     <p>5. Switch to the "Tags Mapping" tab and add a new row with the following configuration:</p>
     <ul>
-        <li>FilePath: MyFactory/TestDevice/Temperature</li>
+        <li>Path: MyFactory/TestDevice/Temperature</li>
         <li>AttributeName: value</li>
         <li>AttributeType: Float</li>
         <li>TagConfiguration: ns=2;i=1001</li>

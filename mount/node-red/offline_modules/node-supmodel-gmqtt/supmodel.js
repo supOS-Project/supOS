@@ -45,7 +45,7 @@ module.exports = function (RED) {
         let data = [];
         if (language == 'en-US') {
             // header
-            data.push(['FilePath(Required)','FileAlias','AttributeName(Required)','AttributeType(Required)','TagConfiguration(Required)']);
+            data.push(['Path(Required)','Alias','AttributeName(Required)','AttributeType(Required)','TagConfiguration(Required)']);
         } else {
             // header
             data.push(['文件路径（必填）','文件别名','属性名称（必填）','属性类型（必填）','位号名（必填）']);

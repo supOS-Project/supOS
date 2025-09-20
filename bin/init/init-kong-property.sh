@@ -1,13 +1,14 @@
 #!/bin/bash
 
 set -e
+ROOT_DIR=$1
 
-export  $(grep -v '^#' $SCRIPT_DIR/../.env.tmp | xargs)
-export  $(grep -v '^#' $SCRIPT_DIR/../.env | xargs)
+export  $(grep -v '^#' $ROOT_DIR/.env.tmp | xargs)
+export  $(grep -v '^#' $ROOT_DIR/.env | xargs)
 
 # 输入文件（模板文件）和输出文件
-TEMPLATE_FILE=$SCRIPT_DIR/../mount/kong/kong_config.yml.tpl
-OUTPUT_FILE=$SCRIPT_DIR/../mount/kong/kong_config.yml
+TEMPLATE_FILE=$ROOT_DIR/mount/kong/kong_config.yml.tpl
+OUTPUT_FILE=$ROOT_DIR/mount/kong/kong_config.yml
 
 rm -f $OUTPUT_FILE
 

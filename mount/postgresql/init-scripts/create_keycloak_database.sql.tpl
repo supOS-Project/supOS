@@ -522,6 +522,7 @@ INSERT INTO "public"."client_scope" VALUES ('2c26c6cb-b18b-4fd9-bbde-38d81cfaa03
 INSERT INTO "public"."client_scope" VALUES ('4e44f85d-bb73-4eb9-af2a-c1a641792a94', 'tipsEnable', '8920b375-d705-4d30-8a71-52d9c14ec4ba', 'tipsEnable', 'openid-connect');
 INSERT INTO "public"."client_scope" VALUES ('51ec41ba-ea8b-4359-80a3-e3de154ee389', 'homePage', '8920b375-d705-4d30-8a71-52d9c14ec4ba', 'homePage', 'openid-connect');
 INSERT INTO "public"."client_scope" VALUES ('7ee32b54-6b11-4f84-ae7a-bec36a6fd1ec', 'phone', '8920b375-d705-4d30-8a71-52d9c14ec4ba', 'phone', 'openid-connect');
+INSERT INTO "public"."client_scope" VALUES ('804408e1-e065-4362-8cd1-414c9b9777b3', 'source', '8920b375-d705-4d30-8a71-52d9c14ec4ba', 'source', 'openid-connect');
 
 -- ----------------------------
 -- Table structure for client_scope_attributes
@@ -614,6 +615,10 @@ INSERT INTO "public"."client_scope_attributes" VALUES ('7ee32b54-6b11-4f84-ae7a-
 INSERT INTO "public"."client_scope_attributes" VALUES ('7ee32b54-6b11-4f84-ae7a-bec36a6fd1ec', '', 'consent.screen.text');
 INSERT INTO "public"."client_scope_attributes" VALUES ('7ee32b54-6b11-4f84-ae7a-bec36a6fd1ec', 'true', 'include.in.token.scope');
 INSERT INTO "public"."client_scope_attributes" VALUES ('7ee32b54-6b11-4f84-ae7a-bec36a6fd1ec', '', 'gui.order');
+INSERT INTO "public"."client_scope_attributes" VALUES ('804408e1-e065-4362-8cd1-414c9b9777b3', 'true', 'display.on.consent.screen');
+INSERT INTO "public"."client_scope_attributes" VALUES ('804408e1-e065-4362-8cd1-414c9b9777b3', '', 'consent.screen.text');
+INSERT INTO "public"."client_scope_attributes" VALUES ('804408e1-e065-4362-8cd1-414c9b9777b3', 'true', 'include.in.token.scope');
+INSERT INTO "public"."client_scope_attributes" VALUES ('804408e1-e065-4362-8cd1-414c9b9777b3', '', 'gui.order');
 
 -- ----------------------------
 -- Table structure for client_scope_client
@@ -770,6 +775,7 @@ INSERT INTO "public"."client_scope_client" VALUES ('a7b53e5e-3567-470a-9da1-94cc
 INSERT INTO "public"."client_scope_client" VALUES ('a7b53e5e-3567-470a-9da1-94cc0c7f18e6', '4e44f85d-bb73-4eb9-af2a-c1a641792a94', 't');
 INSERT INTO "public"."client_scope_client" VALUES ('a7b53e5e-3567-470a-9da1-94cc0c7f18e6', '51ec41ba-ea8b-4359-80a3-e3de154ee389', 't');
 INSERT INTO "public"."client_scope_client" VALUES ('a7b53e5e-3567-470a-9da1-94cc0c7f18e6', '7ee32b54-6b11-4f84-ae7a-bec36a6fd1ec', 't');
+INSERT INTO "public"."client_scope_client" VALUES ('a7b53e5e-3567-470a-9da1-94cc0c7f18e6', '804408e1-e065-4362-8cd1-414c9b9777b3', 't');
 
 -- ----------------------------
 -- Table structure for client_scope_role_mapping
@@ -922,7 +928,7 @@ INSERT INTO "public"."component_config" VALUES ('f4ef63ff-70bd-49cd-86d8-7c50301
 INSERT INTO "public"."component_config" VALUES ('6daef81a-3ec5-42c5-a437-67c74ec4ad45', '42125d59-532f-4f8b-bf8e-d87f7c55c080', 'allowed-protocol-mapper-types', 'oidc-sha256-pairwise-sub-mapper');
 INSERT INTO "public"."component_config" VALUES ('9976f7e8-3d88-42ad-9fd8-e0988121f3ef', '42125d59-532f-4f8b-bf8e-d87f7c55c080', 'allowed-protocol-mapper-types', 'oidc-usermodel-attribute-mapper');
 INSERT INTO "public"."component_config" VALUES ('5dcbea4c-6077-4ff0-9d5d-33a14fec3e00', '724be55b-51c3-45be-bf71-a5d7ae45b7ef', 'allow-default-scopes', 'true');
-INSERT INTO "public"."component_config" VALUES ('ab7b5e83-5bd6-4437-a4bf-fb17abe99d4a', 'a2cf44c3-ba30-4e9d-93e2-973943bb60a3', 'kc.user.profile.config', '{"attributes":[{"name":"username","displayName":"${username}","validations":{"length":{"min":3,"max":255},"username-prohibited-characters":{},"up-username-not-idn-homograph":{}},"permissions":{"view":["admin","user"],"edit":["admin","user"]},"multivalued":false},{"name":"email","displayName":"${email}","validations":{"email":{},"length":{"max":255}},"annotations":{},"permissions":{"view":["admin","user"],"edit":["admin","user"]},"multivalued":false},{"name":"firstTimeLogin","displayName":"firstTimeLogin","validations":{},"annotations":{},"permissions":{"view":[],"edit":["admin"]},"multivalued":false},{"name":"firstName","displayName":"${firstName}","validations":{},"annotations":{},"permissions":{"view":[],"edit":["admin"]},"multivalued":false},{"name":"tipsEnable","displayName":"${profile.attributes.tipsEnable}","validations":{},"annotations":{},"permissions":{"view":["admin"],"edit":["admin"]},"multivalued":false},{"name":"homePage","displayName":"${profile.attributes.homePage}","validations":{},"annotations":{},"permissions":{"view":["admin","user"],"edit":["admin","user"]},"multivalued":false},{"name":"phone","displayName":"${profile.attributes.phone}","validations":{},"annotations":{},"permissions":{"view":["admin","user"],"edit":["admin","user"]},"multivalued":false}],"groups":[{"name":"user-metadata","displayHeader":"User metadata","displayDescription":"Attributes, which refer to user metadata"}]}');
+INSERT INTO "public"."component_config" VALUES ('8de327d0-8233-4cf8-9c6a-b766fcdc9b62', 'a2cf44c3-ba30-4e9d-93e2-973943bb60a3', 'kc.user.profile.config', '{"attributes":[{"name":"username","displayName":"${username}","validations":{"length":{"min":3,"max":255},"username-prohibited-characters":{},"up-username-not-idn-homograph":{}},"permissions":{"view":["admin","user"],"edit":["admin","user"]},"multivalued":false},{"name":"email","displayName":"${email}","validations":{"email":{},"length":{"max":255}},"annotations":{},"permissions":{"view":["admin","user"],"edit":["admin","user"]},"multivalued":false},{"name":"firstTimeLogin","displayName":"firstTimeLogin","validations":{},"annotations":{},"permissions":{"view":[],"edit":["admin"]},"multivalued":false},{"name":"firstName","displayName":"${firstName}","validations":{},"annotations":{},"permissions":{"view":[],"edit":["admin"]},"multivalued":false},{"name":"tipsEnable","displayName":"${profile.attributes.tipsEnable}","validations":{},"annotations":{},"permissions":{"view":["admin"],"edit":["admin"]},"multivalued":false},{"name":"homePage","displayName":"${profile.attributes.homePage}","validations":{},"annotations":{},"permissions":{"view":["admin","user"],"edit":["admin","user"]},"multivalued":false},{"name":"phone","displayName":"${profile.attributes.phone}","validations":{},"annotations":{},"permissions":{"view":["admin","user"],"edit":["admin","user"]},"multivalued":false},{"name":"source","displayName":"${profile.attributes.source}","validations":{},"annotations":{},"permissions":{"view":["admin","user"],"edit":["admin","user"]},"multivalued":false}],"groups":[{"name":"user-metadata","displayHeader":"User metadata","displayDescription":"Attributes, which refer to user metadata"}]}');
 
 -- ----------------------------
 -- Table structure for composite_role
@@ -1055,8 +1061,8 @@ CREATE TABLE "public"."credential" (
 -- ----------------------------
 -- Records of credential
 -- ----------------------------
-INSERT INTO "public"."credential" VALUES ('d3c688d7-ec6c-4ccb-be70-9e0634124421', NULL, 'password', '0d9340a7-4bf5-4bee-9cfd-c707dfe18a22', 1750217451325, '我的密码', '{"value":"2VCGCuWN1PJJTrO+pMHnOvu4u4RvC0YeKmF7aiVBaWQ=","salt":"vqzP+e7kGjFljy9McZFRQA==","additionalParameters":{}}', '{"hashIterations":5,"algorithm":"argon2","additionalParameters":{"hashLength":["32"],"memory":["7168"],"type":["id"],"version":["1.3"],"parallelism":["1"]}}', 10);
-INSERT INTO "public"."credential" VALUES ('588747a6-3f05-497a-bc78-81b7fe3d0e93', NULL, 'password', '66b5114b-0083-48aa-860a-06f1c06ce4c4', 1750224323104, '我的密码', '{"value":"YUeCu4ZmvGvZGGOodcm+qB7nQTkImcpl0n/e0qN4h3k=","salt":"MfASFwkUnBPbLa2wOQ16jA==","additionalParameters":{}}', '{"hashIterations":5,"algorithm":"argon2","additionalParameters":{"hashLength":["32"],"memory":["7168"],"type":["id"],"version":["1.3"],"parallelism":["1"]}}', 10);
+INSERT INTO "public"."credential" VALUES ('d3c688d7-ec6c-4ccb-be70-9e0634124421', NULL, 'password', '0d9340a7-4bf5-4bee-9cfd-c707dfe18a22', 1750217451325, '我的密码', '{"value":"xKCL2W4PCp2mPpSDRq4EUeNKr8V4jDugHSPdfHrbla4=","salt":"fxlzXa4K1NSKlRbONiHZ9A==","additionalParameters":{}}', '{"hashIterations":5,"algorithm":"argon2","additionalParameters":{"hashLength":["32"],"memory":["7168"],"type":["id"],"version":["1.3"],"parallelism":["1"]}}', 10);
+INSERT INTO "public"."credential" VALUES ('588747a6-3f05-497a-bc78-81b7fe3d0e93', NULL, 'password', '66b5114b-0083-48aa-860a-06f1c06ce4c4', 1746512526549, 'My password', '{"value":"75zzlRwO66cfDFCPnpNS3XAZ+HF7nTR+cbj/jVSsAcA=","salt":"y5WNIOmeIfBYdGecbhKQ0Q==","additionalParameters":{}}', '{"hashIterations":5,"algorithm":"argon2","additionalParameters":{"hashLength":["32"],"memory":["7168"],"type":["id"],"version":["1.3"],"parallelism":["1"]}}', 10);
 
 -- ----------------------------
 -- Table structure for databasechangelog
@@ -1294,6 +1300,7 @@ INSERT INTO "public"."default_client_scope" VALUES ('8920b375-d705-4d30-8a71-52d
 INSERT INTO "public"."default_client_scope" VALUES ('8920b375-d705-4d30-8a71-52d9c14ec4ba', '4e44f85d-bb73-4eb9-af2a-c1a641792a94', 't');
 INSERT INTO "public"."default_client_scope" VALUES ('8920b375-d705-4d30-8a71-52d9c14ec4ba', '51ec41ba-ea8b-4359-80a3-e3de154ee389', 't');
 INSERT INTO "public"."default_client_scope" VALUES ('8920b375-d705-4d30-8a71-52d9c14ec4ba', '7ee32b54-6b11-4f84-ae7a-bec36a6fd1ec', 't');
+INSERT INTO "public"."default_client_scope" VALUES ('8920b375-d705-4d30-8a71-52d9c14ec4ba', '804408e1-e065-4362-8cd1-414c9b9777b3', 't');
 
 -- ----------------------------
 -- Table structure for event_entity
@@ -1924,6 +1931,7 @@ INSERT INTO "public"."protocol_mapper" VALUES ('79e141a5-93e9-48c6-b1e2-2efd42aa
 INSERT INTO "public"."protocol_mapper" VALUES ('0dee1f53-4bb9-49df-96a9-d22ece81ca32', 'tipsEnable', 'openid-connect', 'oidc-usermodel-attribute-mapper', NULL, '4e44f85d-bb73-4eb9-af2a-c1a641792a94');
 INSERT INTO "public"."protocol_mapper" VALUES ('99cc17f5-aa0a-452e-873f-d8f669fe32c8', 'homePage', 'openid-connect', 'oidc-usermodel-attribute-mapper', NULL, '51ec41ba-ea8b-4359-80a3-e3de154ee389');
 INSERT INTO "public"."protocol_mapper" VALUES ('0e4ae11e-8be7-4c4f-a742-7c725b007e4d', 'phone', 'openid-connect', 'oidc-usermodel-attribute-mapper', NULL, '7ee32b54-6b11-4f84-ae7a-bec36a6fd1ec');
+INSERT INTO "public"."protocol_mapper" VALUES ('5ae3dfa7-bd5a-45f9-945f-f9864c1edecb', 'source', 'openid-connect', 'oidc-usermodel-attribute-mapper', NULL, '804408e1-e065-4362-8cd1-414c9b9777b3');
 
 -- ----------------------------
 -- Table structure for protocol_mapper_config
@@ -2357,6 +2365,14 @@ INSERT INTO "public"."protocol_mapper_config" VALUES ('0e4ae11e-8be7-4c4f-a742-7
 INSERT INTO "public"."protocol_mapper_config" VALUES ('0e4ae11e-8be7-4c4f-a742-7c725b007e4d', 'true', 'access.token.claim');
 INSERT INTO "public"."protocol_mapper_config" VALUES ('0e4ae11e-8be7-4c4f-a742-7c725b007e4d', 'phone', 'claim.name');
 INSERT INTO "public"."protocol_mapper_config" VALUES ('0e4ae11e-8be7-4c4f-a742-7c725b007e4d', 'String', 'jsonType.label');
+INSERT INTO "public"."protocol_mapper_config" VALUES ('5ae3dfa7-bd5a-45f9-945f-f9864c1edecb', 'true', 'introspection.token.claim');
+INSERT INTO "public"."protocol_mapper_config" VALUES ('5ae3dfa7-bd5a-45f9-945f-f9864c1edecb', 'true', 'userinfo.token.claim');
+INSERT INTO "public"."protocol_mapper_config" VALUES ('5ae3dfa7-bd5a-45f9-945f-f9864c1edecb', 'source', 'user.attribute');
+INSERT INTO "public"."protocol_mapper_config" VALUES ('5ae3dfa7-bd5a-45f9-945f-f9864c1edecb', 'true', 'id.token.claim');
+INSERT INTO "public"."protocol_mapper_config" VALUES ('5ae3dfa7-bd5a-45f9-945f-f9864c1edecb', 'false', 'lightweight.claim');
+INSERT INTO "public"."protocol_mapper_config" VALUES ('5ae3dfa7-bd5a-45f9-945f-f9864c1edecb', 'true', 'access.token.claim');
+INSERT INTO "public"."protocol_mapper_config" VALUES ('5ae3dfa7-bd5a-45f9-945f-f9864c1edecb', 'source', 'claim.name');
+INSERT INTO "public"."protocol_mapper_config" VALUES ('5ae3dfa7-bd5a-45f9-945f-f9864c1edecb', 'String', 'jsonType.label');
 
 
 -- ----------------------------
@@ -3191,7 +3207,7 @@ INSERT INTO "public"."resource_uris" VALUES ('77f52ac5-58cf-4d4b-b850-aa0ac0ace1
 INSERT INTO "public"."resource_uris" VALUES ('77f52ac5-58cf-4d4b-b850-aa0ac0ace1b7', '/flow-editor');
 INSERT INTO "public"."resource_uris" VALUES ('e8768c3e-2de0-40e9-8edf-fe331c539fdf', '/CICD');
 INSERT INTO "public"."resource_uris" VALUES ('e8768c3e-2de0-40e9-8edf-fe331c539fdf', '/home');
-INSERT INTO "public"."resource_uris" VALUES ('e8768c3e-2de0-40e9-8edf-fe331c539fdf', '/grafana-design');
+INSERT INTO "public"."resource_uris" VALUES ('e8768c3e-2de0-40e9-8edf-fe331c539fdf', '/grafana');
 INSERT INTO "public"."resource_uris" VALUES ('e8768c3e-2de0-40e9-8edf-fe331c539fdf', '/McpClient');
 INSERT INTO "public"."resource_uris" VALUES ('e8768c3e-2de0-40e9-8edf-fe331c539fdf', '/collection-gateway-management');
 INSERT INTO "public"."resource_uris" VALUES ('e8768c3e-2de0-40e9-8edf-fe331c539fdf', '/Alert');

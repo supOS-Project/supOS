@@ -15,7 +15,7 @@ if [ "$OS_RESOURCE_SPEC" == "1" ]; then
 fi
 
 # 卸载所有服务
-command="--profile fuxa --profile grafana --profile minio --profile tdengine --profile elk --profile tsdb --profile eventflow" 
+command="--profile fuxa --profile grafana --profile minio --profile elk  --profile eventflow" 
 
 if [ -f $SCRIPT_DIR/../.env.tmp ]; then 
   docker compose --env-file $SCRIPT_DIR/../.env --env-file $SCRIPT_DIR/../.env.tmp --project-name supos $command -f $DOCKER_COMPOSE_FILE down && rm -f $VOLUMES_PATH/backend/system/active-services.txt
@@ -23,8 +23,9 @@ else
   docker compose --env-file $SCRIPT_DIR/../.env --project-name supos $command -f $DOCKER_COMPOSE_FILE down && rm -f $VOLUMES_PATH/backend/system/active-services.txt
 fi
 
-rm -f $SCRIPT_DIR/../.env.tmp > /dev/null 2>&1
-#docker volume ls -q --filter "name=supos" | xargs docker volume rm
-# 删除所有app的容器
+# 删除所有容器
 docker ps -a -q --filter "network=supos_default_network" | xargs --no-run-if-empty docker rm -f > /dev/null 2>&1
+
+rm -f $SCRIPT_DIR/../.env.tmp > /dev/null 2>&1
+
 

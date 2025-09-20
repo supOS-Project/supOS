@@ -4,7 +4,7 @@ set -e
 
 # load npm cache
 rm -rf $SCRIPT_DIR/../mount/node-red/.npm/
-tar -zxvf $SCRIPT_DIR/../mount/node-red/npmCache.tar.gz -C $SCRIPT_DIR/../mount/node-red/ > /dev/null 2>&1
+tar -xf $SCRIPT_DIR/../mount/node-red/npmCache.tar.xz -C $SCRIPT_DIR/../mount/node-red/ > /dev/null 2>&1
 
 info "loading npm cache complete."
 find $SCRIPT_DIR/../mount/grafana/data/plugins/ -type f -name "*.tar.gz" -exec tar -xzvf {} -C $SCRIPT_DIR/../mount/grafana/data/plugins/ \;
@@ -24,9 +24,7 @@ cp -r $SCRIPT_DIR/../mount/node-red/template $VOLUMES_PATH/node-red/
 mkdir -p $VOLUMES_PATH/eventflow/ && cp -r $SCRIPT_DIR/../mount/eventflow/* $VOLUMES_PATH/eventflow/
 cp -r $SCRIPT_DIR/../mount/filebeat/*.yml $VOLUMES_PATH/filebeat/
 cp -r $SCRIPT_DIR/../mount/postgresql/* $VOLUMES_PATH/postgresql/
-cp -r $SCRIPT_DIR/../mount/backend/log/topology.log $VOLUMES_PATH/backend/log/topology.log
-cp -r $SCRIPT_DIR/../mount/backend/system/* $VOLUMES_PATH/backend/system/
-cp -r $SCRIPT_DIR/../mount/backend/ $VOLUMES_PATH/backend/
+cp -r $SCRIPT_DIR/../mount/backend/* $VOLUMES_PATH/backend/
 mkdir -p $VOLUMES_PATH/fuxa/appdata/ && cp $SCRIPT_DIR/../mount/fuxa/appdata/settings.js $VOLUMES_PATH/fuxa/appdata/
 
 cp $SCRIPT_DIR/../mount/plugins/package/*.tar.gz $VOLUMES_PATH/plugins/package/
@@ -37,6 +35,7 @@ chown 1000:0 -R $VOLUMES_PATH/keycloak
 chown 755:0 -R $VOLUMES_PATH/grafana
 
 cp $SCRIPT_DIR/../docker-compose-8c16g.yml $VOLUMES_PATH/backend/system/
+cp $SCRIPT_DIR/../builds.yaml $VOLUMES_PATH/backend/system/
 if [ -f $SCRIPT_DIR/global/active-services.txt ]; then 
   mv $SCRIPT_DIR/global/active-services.txt $VOLUMES_PATH/backend/system/
 fi

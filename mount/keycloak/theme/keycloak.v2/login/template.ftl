@@ -16,8 +16,9 @@
             <i class="fa-sync-alt fas" aria-hidden="true"></i>
             <span class="kc-tooltip-text">${msg("restartLoginTooltip")}</span>
         </button>
-      </div>
-    </@field.group>
+      </div> 
+    </div>
+  </@field.group>
 </#macro>
 
 <#macro registrationLayout bodyClass="" displayInfo=false displayMessage=true displayRequiredFields=false>
@@ -41,6 +42,7 @@
             <link href="${url.resourcesCommonPath}/${style}" rel="stylesheet" />
         </#list>
     </#if>
+    <link rel="stylesheet" href="${url.resourcesPath}/css/auth.css">
     <#if properties.styles?has_content>
         <#list properties.styles?split(' ') as style>
             <link href="${url.resourcesPath}/${style}" rel="stylesheet" />
@@ -64,6 +66,8 @@
         </#list>
     </#if>
     <script type="module" src="${url.resourcesPath}/js/passwordVisibility.js"></script>
+    <script src="${url.resourcesPath}/js/qrcode.min.js"></script>
+    <script type="module" src="${url.resourcesPath}/js/installAuth.js"></script>
     <script type="module">
         import { startSessionPolling } from "${url.resourcesPath}/js/authChecker.js";
         import { handleTheme } from "${url.resourcesPath}/js/customThemeConfig.js";
@@ -79,18 +83,18 @@
 <body id="keycloak-bg" class="${properties.kcBodyClass!}">
 
 <div class="${properties.kcLogin!}">
- <div class="pf-v5-c-login-left">
+  <div class="pf-v5-c-login-left">
     <div class="pf-v5-c-login-l-top">
-      <img class="supos-login-slogan" src=""></img>
+      <img class="supos-login-slogan" src="" />
       <div class="pf-v5-c-login-l-t-right"></div>
     </div>
     <div class="pf-v5-c-login-l-bottom">
-      <img class="supos-logo" src=""></img>
+      <img class="supos-logo" src="" />
       <div>${msg("customIndustrialOperatingSystem")}</div>
     </div>
   </div>
- <div class="${properties.kcLoginContainer!}">
-    <main class="${properties.kcLoginMain!}">
+  <div class="${properties.kcLoginContainer!}">
+    <main class="${properties.kcLoginMain!}" id="main" style="display:none;">
       <div class="${properties.kcLoginMainHeader!}">
         <h1 class="${properties.kcLoginMainTitle!}" id="kc-page-title"><#nested "header"></h1>
         <#if realm.internationalizationEnabled  && locale.supported?size gt 1>
@@ -133,7 +137,7 @@
         </#if>
       </div>
       <!--<div class="kc-page-title-tip">If you are already a member you can login with your user name and password.</div>-->
-      <div class="${properties.kcLoginMainBody!}">
+      <div id="kcFormBox" class="${properties.kcLoginMainBody!}">
         <#if !(auth?has_content && auth.showUsername() && !auth.showResetCredentials())>
             <#if displayRequiredFields>
                 <div class="${properties.kcContentWrapperClass!}">
@@ -203,6 +207,87 @@
         <#nested "socialProviders">
       </div>
     </main>
+    <div class="errorBox" id="errorBox">
+      <i class="fas fa-exclamation-circle" aria-hidden="true"></i>
+      <span id="errorMsgContent"></span>
+    </div>
+    <div class="auth-box" id="authBox" style="display:none;">
+      <!-- 国际化文本容器，用于JavaScript -->
+      <div id="i18n-messages" style="display:none;" 
+        data-requestFailed="${msg("requestFailed")}"
+        data-pleaseEnterRealPhoneNumber="${msg("pleaseEnterRealPhoneNumber")}"
+        data-pleaseEnterRealEmail="${msg("pleaseEnterRealEmail")}">
+      </div>
+      <div class="auth-box-title"> 
+        ${msg("loginLicenseAuthentication")}
+      </div>
+      <div class="form-item required">
+        <label for="companyName"><span class="required-dot">*</span>${msg("companyName")}</label>
+        <input type="text" id="companyName" name="companyName" placeholder="${msg("pleaseEnterCompanyName")}" />
+        <span class="error-msg" id="companyNameError"></span>
+      </div>
+      <div class="form-item required">
+        <label for="username"><span class="required-dot">*</span>${msg("applicant")}</label>
+        <input type="text" id="username" name="username" placeholder="${msg("pleaseEnterApplicant")}" />
+        <span class="error-msg" id="usernameError"></span>
+      </div>
+      <div class="form-item required">
+        <label for="phone"><span class="required-dot">*</span>${msg("phoneNumber")}</label>
+        <input type="text" id="phone" name="phone" placeholder="${msg("pleaseEnterPhoneNumber")}" />
+        <span class="error-msg" id="phoneError"></span>
+      </div>
+      <div class="form-item required">
+        <label for="email">${msg("email")}</label>
+        <input type="email" id="email" name="email" placeholder="${msg("pleaseEnterEmail")}" />
+        <span class="error-msg" id="emailError"></span>
+      </div>
+      <div class="form-item required">
+        <label for="industryCode"><span class="required-dot">*</span>${msg("industry")}</label>
+        <select id="industryCode" name="industryCode" >
+          <option value="A">${msg("chemicalIndustry")}</option>
+          <option value="B">${msg("petrify")}</option>
+          <option value="C">${msg("electricity")}</option>
+          <option value="D">${msg("metallurgy")}</option>
+          <option value="E">${msg("buildingMaterials")}</option>
+          <option value="F">${msg("papermaking")}</option>
+          <option value="G">${msg("foodAndMedicine")}</option>
+          <option value="H">${msg("equipmentManufacturing")}</option>
+          <option value="I">${msg("automotiveParts")}</option>
+          <option value="J">${msg("metalProducts")}</option>
+          <option value="K">${msg("electronicAppliancesAndInstruments")}</option>
+          <option value="N">${msg("teachingAndResearch")}</option>
+          <option value="O">${msg("smartPark")}</option>
+          <option value="P">${msg("informationSoftwareEcosystemPartner")}</option>
+          <option value="Q">${msg("specialProject")}</option>
+          <option value="R">${msg("utilityService")}</option>
+          <option value="S">${msg("urbanInfrastructure")}</option>
+          <option value="L">${msg("newMaterialsIndustry")}</option>
+          <option value="M">${msg("otherIndustries")}</option>
+        </select>
+        <span class="error-msg" id="industryCodeError"></span>
+      </div>
+      <div class="form-item required" id="verifyCodeFormItem" style="display: none">
+        <label for="verifyCode"><span class="required-dot">*</span>${msg("verificationCode")}</label>
+        <div class="auth-code-wrapper">
+          <input type="text" class="formInput auth-code-input" id="verifyCode" name="verifyCode" placeholder="${msg("pleaseEnterVerificationCode")}" style="padding-right: 116px;" />
+          <span class="auth-code-suffix">
+            <a class="get-code-btn" id="getCodeBtn">${msg("getVerificationCode")}</a>
+          </span>
+        </div>
+        <span class="error-msg" id="verifyCodeError"></span>
+      </div>
+      <button class="button primary" id="submitAuth">${msg("confirm")}</button>
+      <div class="codeErrorMsg" id="codeErrorMsg">
+        <div class="divider"></div>
+        <span>
+          ${msg("networkErrorScanQRCode")}
+        </span>
+        <div class="qrImg" id="qrImg"></div>
+      </div>
+    </div>
+    <div class="loadingWrap" id="loadingWrap" style="display:none;">
+      <div class="customLoading" id="customLoading"></div>
+    </div>
   </div>
 </div>
 </body>
