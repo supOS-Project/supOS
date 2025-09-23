@@ -1,7 +1,7 @@
 images:
   - imagePath: eco-registry.supos.com/sup9bnlh
     imageName: backend
-    imageTag: 1.0.11-T17
+    imageTag: 1.0.11-T19
 
   - imagePath: eco-registry.supos.com/sup9bnlh
     imageName: supos-frontend-platform

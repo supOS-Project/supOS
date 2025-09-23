@@ -2433,7 +2433,7 @@ paths:
           required: false
           example: ''
           schema:
-            type: boolean
+            type: string
         - name: status
           in: query
           description: "Todo state: 0-unhandled 1-processed"

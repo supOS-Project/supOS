@@ -1315,7 +1315,50 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/HistoryValueRequest'
+              type: object
+              properties:
+                fill:
+                  $ref: '#/components/schemas/Fill'
+                groupBy:
+                  $ref: '#/components/schemas/GroupBy'
+                limit:
+                  type: integer
+                  description: 返回的最大元素数目，默认1000，最大10000
+                  format: int32
+                offset:
+                  type: integer
+                  description: 偏移量，从指定条数后开始查询，例如 offset=5 表示从第6条开始查询
+                  format: int32
+                order:
+                  type: string
+                  description: 排序方式，可选值：ASC（升序）、DESC（降序）
+                select:
+                  type: array
+                  description: >-
+                    查询的字段表达式列表，例如：文件别名 'SAxxx' 或聚合函数 'first("SBxxx")' 
+                    ，支持文件的指定字段查询：'文件.字段名'， 如果不指定字段名默认查询value字段
+                  items:
+                    type: string
+                    description: >-
+                      查询的字段表达式列表，例如：文件别名 'SAxxx' 或聚合函数 'first("SBxxx")' 
+                      支持文件的指定字段查询：'文件.字段名'
+                where:
+                  type: object
+                  properties:
+                    and:
+                      type: object
+                      properties: {}
+                      description: and条件
+                    or:
+                      type: object
+                      properties: {}
+                      description: or条件
+                  additionalProperties:
+                    type: object
+                    description: 过滤条件
+                  description: 过滤条件
+              required:
+                - where
             examples: {}
       responses:
         '200':
@@ -2485,7 +2528,7 @@ paths:
           required: false
           example: ''
           schema:
-            type: boolean
+            type: string
         - name: status
           in: query
           description: 代办状态：0-未处理 1-已处理
@@ -2838,44 +2881,6 @@ components:
           type: string
           description: 窗口配置字符串，如 5s,1s
       description: 聚合窗口配置对象
-    HistoryValueRequest:
-      type: object
-      properties:
-        fill:
-          $ref: '#/components/schemas/Fill'
-        groupBy:
-          $ref: '#/components/schemas/GroupBy'
-        limit:
-          type: integer
-          description: 返回的最大元素数目，默认1000，最大10000
-          format: int32
-        offset:
-          type: integer
-          description: 偏移量，从指定条数后开始查询，例如 offset=5 表示从第6条开始查询
-          format: int32
-        order:
-          type: string
-          description: 排序方式，可选值：ASC（升序）、DESC（降序）
-        select:
-          type: array
-          description: >-
-            查询的字段表达式列表，例如：文件别名 'SAxxx' 或聚合函数 'first("SBxxx")' 
-            支持文件的指定字段查询：'文件.字段名'
-          items:
-            type: string
-            description: >-
-              查询的字段表达式列表，例如：文件别名 'SAxxx' 或聚合函数 'first("SBxxx")' 
-              支持文件的指定字段查询：'文件.字段名'
-        where:
-          type: object
-          properties:
-            empty:
-              type: boolean
-          additionalProperties:
-            type: object
-            description: 过滤条件
-          description: 过滤条件
-      description: 查询请求参数对象
     ResultVOSysModuleDto:
       type: object
       properties:

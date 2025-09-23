@@ -74,19 +74,21 @@ chooseProfile1() {
             activeServices+=",minio"
         fi
 
-        if [[ "$LANGUAGE" == "zh-CN" ]]; then
-            choicemqtt=$(loopConfirmB "Step 5: 请选择MQTT插件: [1] emqx(default)  [2] gmqtt : ")
-        else 
-            choicemqtt=$(loopConfirmB "Step 5: Please choose MQTT plugin: [1] emqx(default)  [2] gmqtt : ")
-        fi
-        choicemqtt=${choicemqtt:-1}
-        if [[ $choicemqtt == 1 ]]; then
-            profileCommand+="--profile emqx "
-            activeServices+=",emqx"
-        else 
-            profileCommand+="--profile gmqtt "
-            activeServices+=",gmqtt"
-        fi
+        # if [[ "$LANGUAGE" == "zh-CN" ]]; then
+        #     choicemqtt=$(loopConfirmB "Step 5: 请选择MQTT插件: [1] emqx(default)  [2] gmqtt : ")
+        # else 
+        #     choicemqtt=$(loopConfirmB "Step 5: Please choose MQTT plugin: [1] emqx(default)  [2] gmqtt : ")
+        # fi
+        # choicemqtt=${choicemqtt:-1}
+        # if [[ $choicemqtt == 1 ]]; then
+        #     profileCommand+="--profile emqx "
+        #     activeServices+=",emqx"
+        # else 
+        #     profileCommand+="--profile gmqtt "
+        #     activeServices+=",gmqtt"
+        # fi
+        profileCommand+="--profile emqx "
+        activeServices+=",emqx"
 
     fi 
     echo $activeServices > $OUTPUT_FILE
@@ -142,20 +144,21 @@ chooseProfile2() {
             profileCommand+="--profile elk "
         fi
 
-        if [[ "$LANGUAGE" == "zh-CN" ]]; then
-            choicemqtt=$(loopConfirmB "Step 6: 请选择MQTT插件: [1] emqx(default)  [2] gmqtt : ")
-        else 
-            choicemqtt=$(loopConfirmB "Step 6: Please choose MQTT plugin: [1] emqx(default)  [2] gmqtt : ")
-        fi
-        choicemqtt=${choicemqtt:-1}
-        if [[ $choicemqtt == 1 ]]; then
-            profileCommand+="--profile emqx "
-            activeServices+=",emqx"
-        else 
-            profileCommand+="--profile gmqtt "
-            activeServices+=",gmqtt"
-        fi
-
+        # if [[ "$LANGUAGE" == "zh-CN" ]]; then
+        #     choicemqtt=$(loopConfirmB "Step 6: 请选择MQTT插件: [1] emqx(default)  [2] gmqtt : ")
+        # else 
+        #     choicemqtt=$(loopConfirmB "Step 6: Please choose MQTT plugin: [1] emqx(default)  [2] gmqtt : ")
+        # fi
+        # choicemqtt=${choicemqtt:-1}
+        # if [[ $choicemqtt == 1 ]]; then
+        #     profileCommand+="--profile emqx "
+        #     activeServices+=",emqx"
+        # else 
+        #     profileCommand+="--profile gmqtt "
+        #     activeServices+=",gmqtt"
+        # fi
+        profileCommand+="--profile emqx "
+        activeServices+=",emqx"
     fi 
     
     echo $activeServices > $OUTPUT_FILE
